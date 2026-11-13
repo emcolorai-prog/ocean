@@ -88,7 +88,7 @@ h2{font-size:clamp(34px,4.6vw,68px);line-height:1.02}
 .stats span{display:block;margin-top:10px;color:#9fb7d1;font-size:14px;line-height:1.5}
 /* about bento with spotlight */
 .bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:180px;gap:14px;margin-top:50px}
-@media(max-width:900px){.bento{grid-template-columns:1fr 1fr}.bento>*{grid-column:span 2!important;grid-row:auto!important;min-height:200px}}
+@media(max-width:900px){.bento{grid-template-columns:1fr 1fr;grid-auto-rows:auto}.bento>*{grid-column:span 2!important;grid-row:auto!important;min-height:0}.bento>.cell.ph{min-height:240px}}
 .cell{position:relative;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:var(--navy2);padding:26px;isolation:isolate}
 .cell:before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(71,178,255,.16),transparent 40%);opacity:0;transition:opacity .3s;z-index:-1}
 .cell:hover:before{opacity:1}
@@ -261,7 +261,8 @@ h2{font-size:clamp(34px,4.6vw,68px);line-height:1.02}
 .reg div{border:1px dashed rgba(228,177,77,.5);border-radius:18px;padding:18px}.reg b{display:block;font:600 16px var(--display)}.reg span{color:#b9cde3;font-size:14px}
 /* ai + contact */
 .term{border-radius:28px;overflow:hidden;display:grid;grid-template-columns:1.5fr 1fr}
-@media(max-width:900px){.term{grid-template-columns:1fr}}
+@media(max-width:900px){.term{grid-template-columns:minmax(0,1fr)}.term .chat{border-right:0;border-bottom:1px solid var(--line);height:540px;min-width:0}}
+@media(max-width:520px){.disc{grid-template-columns:minmax(0,1fr)}}
 .term .chat{height:600px;padding:20px;display:flex;flex-direction:column;border-right:1px solid var(--line)}
 .term .side{padding:34px;display:flex;flex-direction:column;gap:16px;justify-content:center}
 .term .bd-enq{background:var(--paper);color:var(--ink);border:0;font-family:'JetBrains Mono'}
@@ -287,6 +288,48 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:#9fb7d1;font-size:1
 .lbx button{min-width:48px;min-height:48px;border-radius:50%;border:1px solid var(--line);background:none;color:#fff;font-size:20px}
 .rv{opacity:0;transform:translateY(30px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.orbit .ring{animation:none}}
+/* keep every section inside the screen width (stops the page sliding sideways on phones) */
+html,body{overflow-x:clip}
+section{overflow-x:clip}
+.tank .t em{position:relative;z-index:1;font:600 12px 'JetBrains Mono';font-style:normal;color:#eaf3ff}
+/* phone layout */
+@media(max-width:700px){
+  .pad{padding:72px 0}
+  .dock{gap:4px;padding:5px 5px 5px 8px}
+  .dock .k{display:none}
+  .dock b{margin:0 6px 0 2px}
+  .dock .q{white-space:nowrap;padding:10px 14px}
+  body .bd-launch{right:14px;bottom:max(14px,env(safe-area-inset-bottom));width:52px;height:52px;padding:0;justify-content:center;gap:0}
+  body .bd-launch>span:last-child{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  body .bd-launch .pulse{display:none}
+  .cell{padding:22px}
+  .orbit{width:min(560px,calc(100vw - 70px))}
+  .orbit .nd{width:84px;font-size:11px}
+  .orbit .nd span{width:44px;height:44px;font-size:12px}
+  .oinfo{padding:24px;min-height:0}
+  .thermo{grid-template-columns:92px minmax(0,1fr);gap:12px;margin-top:28px}
+  .dial{width:auto;padding:16px 6px;border-radius:22px}
+  .dial .v{font-size:24px}
+  .dial input{height:220px}
+  .dial small{font-size:9px;letter-spacing:.08em}
+  .room{min-height:340px;border-radius:22px}
+  .room .ov{left:12px;right:12px;top:12px;flex-direction:column;gap:8px}
+  .room .badge{padding:9px 12px;align-self:flex-start}
+  .room .badge b{font-size:15px}
+  .room .note{display:none}
+  .room canvas{left:12px;right:12px;bottom:12px;width:calc(100% - 24px);height:90px}
+  .sch{padding:20px 16px;overflow:visible;border-radius:22px}
+  .line{min-width:0;flex-wrap:wrap;margin:4px 0 20px}
+  .line h4{width:100%;margin:0 0 12px}
+  .tank{font-size:0;gap:0;flex:0 0 auto}
+  .tank .t{width:46px;height:46px;border-radius:12px}
+  .pipe{flex:1 1 8px;min-width:8px;height:4px}
+  .schinfo{min-height:84px;align-content:flex-start}
+  .schinfo b{font-size:18px}
+  .svc3 div,.vmc div,.clock{padding:22px}
+  .ci b{font-size:14px}
+  .form{padding:24px 20px}
+}
 </style>
 </head>
 <body>
@@ -387,7 +430,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:#9fb7d1;font-size:1
 <div><b>Processing halls</b><span>Worktables, conveyors and washable floors.</span></div>
 </div>
 <div class="wall" id="wall"></div>
-<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:26px;padding:24px;margin-top:30px"><img src="hd/brochure-cover.jpg" alt="Catalogue cover" style="width:170px;border-radius:12px"><div style="flex:1 1 300px"><span class="tag"><i></i>PDF · 39 pages · in English</span><h3 style="font:600 24px Unbounded;margin:8px 0">Slaughterhouse equipment catalogue</h3><p style="color:#b9cde3;margin:0 0 14px;line-height:1.6">Photos of every unit we supply: cattle, camel and sheep lines, carcass processing, chilling rails, deboning and packing, compressed air, holding pens and steam boilers.</p><a class="btn gold" href="https://ocean-ei.com/assets/docs/ocean-slaughterhouse-equipment.pdf" target="_blank" rel="noopener">Download catalogue ↗</a></div></div>
+<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:26px;padding:24px;margin-top:30px"><img src="hd/brochure-cover.jpg" alt="Catalogue cover" style="width:170px;border-radius:12px"><div style="flex:1 1 300px"><span class="tag"><i></i>PDF · 39 pages · in English</span><h3 style="font:600 24px Unbounded;margin:8px 0">Slaughterhouse equipment catalogue</h3><p style="color:#b9cde3;margin:0 0 14px;line-height:1.6">Photos of every unit we supply: cattle, camel and sheep lines, carcass processing, chilling rails, deboning and packing, compressed air, holding pens and steam boilers.</p><a class="btn gold" href="https://ocean-ei.com/assets/docs/ocean-slaughterhouse-equipment.pdf" target="_blank" rel="noopener">Download catalogue</a></div></div>
 </div></section>
 
 <section id="cold" class="cold pad"><div class="wrap">
@@ -446,7 +489,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:#9fb7d1;font-size:1
 <div class="hotw">
 <div class="hot" id="hot"><img src="hd/irr-tower-3d.jpg" alt="3D model of the robust centre pivot"></div>
 <div><span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>Tap the numbered points</span><h3 style="font:600 32px Unbounded;margin:14px 0 18px">Inside the centre pivot</h3><div class="tip glass" id="tip" aria-live="polite"></div>
-<a class="btn" style="margin-top:18px" href="https://ocean-ei.com/assets/docs/ocean-irrigation-brochure.pdf" target="_blank" rel="noopener">Get the brochure (PDF · 17 pages · French) ↗</a></div>
+<a class="btn" style="margin-top:18px" href="https://ocean-ei.com/assets/docs/ocean-irrigation-brochure.pdf" target="_blank" rel="noopener">Get the brochure (PDF · 17 pages · French)</a></div>
 </div>
 <div style="margin-top:90px"><span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>Why choose OCEAN</span><h2 style="margin-top:14px;font-size:clamp(28px,3.6vw,52px)">Engineered for the field, ready for the future</h2></div>
 <div class="svc3">
@@ -502,7 +545,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:#9fb7d1;font-size:1
 
 </div>
 <p class="lead" style="margin-top:22px;font-size:16px">Partnerships with regional and international manufacturers of irrigation and agricultural equipment.</p>
-<div class="reg"><div><b>Oman Chamber of Commerce and Industry</b><span>Member · Membership No. 855179</span></div><div><b>Ministry of Commerce, Industry and Investment Promotion</b><span>Commercial Registration No. 1626273 · registered 2025</span></div></div>
+<div class="reg"><div><b>Oman Chamber of Commerce and Industry</b><span>Member · Membership No. 855179</span></div><div><b>Ministry of Commerce, Industry and Investment Promotion</b><span>Commercial Registration No. 1626373 · registered 2025</span></div></div>
 </div></section>
 
 <section id="ai" class="pad" style="padding-top:20px"><div class="wrap">
@@ -518,7 +561,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:#9fb7d1;font-size:1
 <div class="ci glass"><small>MOBILE · OMAN</small><b>+968 9124 0816</b></div><div class="ci glass"><small>TELEFAX · OMAN</small><b>+968 9191 2329</b></div>
 <div class="ci glass"><small>MAURITANIA</small><b>+222 2770 5181</b></div><div class="ci glass"><small>MOBILE · MAURITANIA</small><b>+222 2247 4745</b></div>
 <div class="ci glass"><small>MOBILE · SUDAN</small><b>+249 123 110 001</b></div><div class="ci glass"><small>MOBILE · CHINA</small><b>+86 166 2841 9851</b></div>
-<div class="ci glass"><small>EMAIL</small><b><a href="mailto:info@ocean-ei.com">info@ocean-ei.com</a><br><a href="mailto:Oceannvst@gmail.com">Oceannvst@gmail.com</a></b></div><div class="ci glass"><small>WORKSHOP</small><b>Raysut Industrial Area, Salalah</b></div><div class="ci glass"><small>C.R. NO.</small><b>1626373</b></div>
+<div class="ci glass" style="grid-column:span 2"><small>EMAIL</small><b><a href="mailto:info@ocean-ei.com">info@ocean-ei.com</a><br><a href="mailto:Oceannvst@gmail.com">Oceannvst@gmail.com</a></b></div><div class="ci glass"><small>WORKSHOP</small><b>Raysut Industrial Area, Salalah</b></div><div class="ci glass"><small>C.R. NO.</small><b>1626373</b></div>
 </div>
 <form class="form" id="form" novalidate>
 <h3>Send us a message</h3><p class="hint">Please include the type of project, the capacity and the location.</p>
@@ -703,12 +746,19 @@ window.BAWADI_SITE = function (D, photo, esc) {
   var EL = [["Organic waste", "From slaughter operations", "65%"], ["Sludge treatment", "Stabilised and reduced", "50%"], ["Anaerobic digestion", "Biodegradable fraction", "70%"], ["Biogas", "Renewable energy, less waste to dispose of", "80%"]];
   var EX = { "Treatment plant design": "Sized to the slaughterhouse's capacity and its wastewater.", "Organic waste treatment": "Managing slaughter waste and safely recovering resources.", "Biogas production": "Anaerobic digestion that turns waste into energy.", "Treated water reuse": "Reuse for suitable purposes once quality is met.", "Environmental management": "Less pollution and support for compliance." };
   var sch = document.getElementById("sch");
-  function lineHTML(arr, cls, title) { return '<div class="line ' + cls + '"><h4>' + title + '</h4>' + arr.map(function (s, i) { return (i ? '<div class="pipe"></div>' : "") + '<button type="button" class="tank" data-n="' + esc(s[0]) + '" data-d="' + esc(s[1]) + '"><span class="t" style="--lv:' + s[2] + '"></span>' + esc(s[0]) + '</button>'; }).join("") + '</div>'; }
+  function lineHTML(arr, cls, title) { return '<div class="line ' + cls + '"><h4>' + title + '</h4>' + arr.map(function (s, i) { return (i ? '<div class="pipe"></div>' : "") + '<button type="button" class="tank" aria-label="' + esc(s[0]) + '" data-n="' + esc(s[0]) + '" data-d="' + esc(s[1]) + '"><span class="t" style="--lv:' + s[2] + '"><em>0' + (i + 1) + '</em></span>' + esc(s[0]) + '</button>'; }).join("") + '</div>'; }
   sch.innerHTML = lineHTML(WL, "", "WATER LINE<br>wastewater → reuse") + lineHTML(EL, "energy", "ENERGY LINE<br>waste → power") + '<div class="schinfo" id="sinf"></div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:18px">' + Object.keys(EX).map(function (k) { return '<button type="button" class="pill" data-x="' + esc(k) + '" style="color:#fff">' + esc(k) + '</button>'; }).join("") + '</div>';
   var sinf = document.getElementById("sinf");
   function pick(b) { [].forEach.call(sch.querySelectorAll(".tank"), function (t) { t.classList.toggle("on", t === b); }); sinf.innerHTML = "<b>" + b.getAttribute("data-n") + "</b><span>" + b.getAttribute("data-d") + "</span>"; }
-  [].forEach.call(sch.querySelectorAll(".tank"), function (b) { b.onclick = function () { pick(b); }; }); pick(sch.querySelector(".tank"));
-  [].forEach.call(sch.querySelectorAll("[data-x]"), function (b) { b.onclick = function () { [].forEach.call(sch.querySelectorAll(".tank"), function (t) { t.classList.remove("on"); }); var k = b.getAttribute("data-x"); sinf.innerHTML = "<b>" + esc(k) + "</b><span>" + esc(EX[k]) + "</span>"; }; });
+  var tanks = sch.querySelectorAll(".tank"), ti = 0, auto = null, schVis = false;
+  function stopAuto() { if (auto) { clearInterval(auto); auto = null; } }
+  [].forEach.call(tanks, function (b) { b.onclick = function () { stopAuto(); pick(b); }; }); pick(tanks[0]);
+  /* step through the stages automatically while the schematic is on screen, until the visitor taps one */
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    auto = setInterval(function () { if (!schVis) return; ti = (ti + 1) % tanks.length; pick(tanks[ti]); }, 2600);
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { schVis = es[0].isIntersecting; }, { threshold: .4 }).observe(sch); else schVis = true;
+  }
+  [].forEach.call(sch.querySelectorAll("[data-x]"), function (b) { b.onclick = function () { stopAuto(); [].forEach.call(sch.querySelectorAll(".tank"), function (t) { t.classList.remove("on"); }); var k = b.getAttribute("data-x"); sinf.innerHTML = "<b>" + esc(k) + "</b><span>" + esc(EX[k]) + "</span>"; }; });
 
   /* pivot simulator */
   var pc = document.getElementById("piv"), pg = pc.getContext("2d"), paint = document.createElement("canvas"); paint.width = paint.height = 640; var pp = paint.getContext("2d");
