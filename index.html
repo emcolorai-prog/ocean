@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OCEAN Engineering &amp; Investment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#051428;--navy2:#0a2340;--navy3:#123156;--blue:#1663d6;--sky:#47b2ff;--gold:#e4b14d;--paper:#f4f7fb;--ink:#0c1a2b;--muted:#566779;
+--accent:#47b2ff;--accent-ink:#051428;--line:rgba(71,178,255,.16);--display:'Unbounded',sans-serif;
+--chat-ai:#0d2a4c;--chat-ai-ink:#eaf3ff;--field:#051428;--field-ink:#eaf3ff;--drawer:#0a2340;--drawer-ink:#eaf3ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--navy);color:#eaf3ff;font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+@media (hover:hover){body,a,button{cursor:none}}
+[dir=rtl] body{font-family:'IBM Plex Sans Arabic',sans-serif}
+a{color:var(--sky)}
+.wrap{max-width:1300px;margin:0 auto;padding:0 32px}@media(max-width:700px){.wrap{padding:0 18px}}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:600;letter-spacing:-.02em}
+[dir=rtl] h1,[dir=rtl] h2,[dir=rtl] h3{font-family:'IBM Plex Sans Arabic',sans-serif}
+h2{font-size:clamp(34px,4.6vw,68px);line-height:1.02}
+.mono{font-family:'JetBrains Mono',monospace}
+.grad{background:linear-gradient(90deg,#47b2ff,#9fd7ff 45%,#e4b14d);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tag{font:600 11px 'JetBrains Mono';letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:inline-flex;gap:10px;align-items:center}
+.tag i{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);display:inline-block}
+.lead{font-size:18px;line-height:1.75;color:#b9cde3;margin:0}
+.pad{padding:clamp(90px,10vw,150px) 0}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 24px;border-radius:999px;font:700 15px Manrope;text-decoration:none;border:1px solid rgba(255,255,255,.22);color:#fff;background:rgba(255,255,255,.05);transition:all .25s;position:relative}
+.btn:hover{background:rgba(255,255,255,.12)}
+.btn.gold{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.glass{background:rgba(10,35,64,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line)}
+/* cursor */
+#cur,#cur2{position:fixed;left:0;top:0;pointer-events:none;z-index:200;border-radius:50%;transform:translate(-50%,-50%)}
+#cur{width:8px;height:8px;background:var(--gold)}
+#cur2{width:38px;height:38px;border:1.5px solid rgba(71,178,255,.7);transition:width .25s,height .25s,background .25s}
+#cur2.big{width:74px;height:74px;background:rgba(71,178,255,.12)}
+@media (hover:none){#cur,#cur2{display:none}}
+/* dock */
+.dock{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:6px;padding:6px 6px 6px 10px;border-radius:999px;width:max-content;max-width:calc(100vw - 24px)}
+.dock .lg{width:38px;height:42px;border-radius:9px;background:none;overflow:visible;flex:none}.dock .lg img{width:100%;height:100%;object-fit:contain}
+.dock b{font:800 13px var(--display);letter-spacing:.12em;margin:0 10px 0 4px}
+.dock a.l{color:#cfe0f3;text-decoration:none;font:600 13px Manrope;padding:10px 12px;border-radius:999px}
+.dock a.l:hover,.dock a.l.on{background:rgba(255,255,255,.08);color:#fff}
+.dock .k{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#9fc4e6;font:600 12px 'JetBrains Mono';background:none}
+.dock .k kbd{border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:11px}
+.dock .q{background:var(--gold);color:var(--navy);border-radius:999px;padding:10px 16px;font:800 13px Manrope;text-decoration:none}
+.dock .lang{border:0;background:none;color:#cfe0f3;font:700 13px 'IBM Plex Sans Arabic';padding:10px}
+@media(max-width:1100px){.dock a.l{display:none}}
+/* palette */
+.pal{position:fixed;inset:0;z-index:150;background:rgba(2,8,18,.6);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding-top:14vh}
+.pal.open{display:flex}
+.pal .box{width:min(620px,92vw);border-radius:20px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.pal input{width:100%;background:none;border:0;border-bottom:1px solid var(--line);padding:20px 22px;color:#fff;font:500 18px Manrope;outline:none}
+.pal ul{list-style:none;margin:0;padding:8px;max-height:50vh;overflow:auto}
+.pal li button{width:100%;text-align:left;display:flex;justify-content:space-between;gap:10px;padding:13px 14px;border-radius:12px;background:none;border:0;color:#cfe0f3;font:600 15px Manrope}
+.pal li button.sel,.pal li button:hover{background:rgba(71,178,255,.12);color:#fff}
+.pal li small{font:600 11px 'JetBrains Mono';color:var(--gold)}
+/* hero 3D build */
+#build{position:relative;height:420vh}
+#build .stick{position:sticky;top:0;height:100vh;overflow:hidden}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+#build .vign{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 60% 50%,transparent 40%,rgba(5,20,40,.85) 100%)}
+.hcopy{position:absolute;left:max(32px,calc((100vw - 1300px)/2 + 32px));top:50%;transform:translateY(-50%);max-width:620px;pointer-events:none}
+.hcopy *{pointer-events:auto}
+.hcopy .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.hcopy .chips span{border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 12px;font:700 10px Manrope;letter-spacing:.14em;background:rgba(5,20,40,.5)}
+.hcopy h1{font:800 clamp(46px,6.6vw,104px)/.95 var(--display);letter-spacing:-.04em}
+.hcopy p{font-size:18px;line-height:1.65;color:#cfe0f3;margin:22px 0 28px;max-width:520px}
+.hcopy{transition:opacity .4s,transform .4s}
+.hud{position:absolute;right:max(24px,calc((100vw - 1300px)/2 + 32px));top:110px;width:300px;border-radius:18px;padding:18px;font:600 12px 'JetBrains Mono';letter-spacing:.06em}
+.hud .row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line)}.hud .row:last-child{border:0}
+.hud .row b{color:#fff}.hud .row .g{color:var(--gold)}
+.hud .bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;margin-top:10px;overflow:hidden}.hud .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sky),var(--gold))}
+.phase{position:absolute;left:max(32px,calc((100vw - 1300px)/2 + 32px));bottom:60px;max-width:520px;border-radius:20px;padding:22px 24px;opacity:0;transform:translateY(20px);transition:all .5s}
+.phase.on{opacity:1;transform:none}
+.phase small{font:600 11px 'JetBrains Mono';letter-spacing:.18em;color:var(--gold)}
+.phase h3{font:600 26px var(--display);margin:8px 0}.phase p{margin:0;color:#b9cde3;line-height:1.6}
+.steps{position:absolute;right:max(24px,calc((100vw - 1300px)/2 + 32px));bottom:60px;display:flex;gap:6px}
+.steps i{width:38px;height:4px;border-radius:4px;background:rgba(255,255,255,.15)}.steps i.on{background:var(--gold)}
+.drag{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font:600 11px 'JetBrains Mono';letter-spacing:.18em;color:#9fc4e6}
+@media(max-width:900px){.hud{display:none}.phase{right:18px}.steps{display:none}}
+.nogl .fallback{position:absolute;inset:0;background:url(hd/site-aerial-poster.jpg) center/cover;filter:saturate(.8) brightness(.55)}
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--navy)}
+@media(max-width:800px){.stats{grid-template-columns:1fr 1fr}}
+.stats div{padding:34px 28px;border-right:1px solid var(--line);position:relative;overflow:hidden}
+.stats b{display:block;font:800 clamp(40px,4.4vw,64px)/1 var(--display)}
+.stats span{display:block;margin-top:10px;color:#9fb7d1;font-size:14px;line-height:1.5}
+/* about bento with spotlight */
+.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:180px;gap:14px;margin-top:50px}
+@media(max-width:900px){.bento{grid-template-columns:1fr 1fr}.bento>*{grid-column:span 2!important;grid-row:auto!important;min-height:200px}}
+.cell{position:relative;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:var(--navy2);padding:26px;isolation:isolate}
+.cell:before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),rgba(71,178,255,.16),transparent 40%);opacity:0;transition:opacity .3s;z-index:-1}
+.cell:hover:before{opacity:1}
+.cell.ph{padding:0}.cell.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1s}.cell.ph:hover img{transform:scale(1.05)}
+.cell.ph .cap{position:absolute;inset:auto 0 0 0;padding:20px;background:linear-gradient(transparent,rgba(5,20,40,.92))}
+.cell h3{font:600 22px/1.2 var(--display)}.cell p{color:#b9cde3;line-height:1.7;margin:10px 0 0}
+.pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-weight:700;font-size:14px;margin:4px 6px 0 0;background:rgba(71,178,255,.06)}
+/* orbit services */
+.orbitwrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:40px}
+@media(max-width:900px){.orbitwrap{grid-template-columns:1fr}}
+.orbit{position:relative;width:min(560px,90vw);aspect-ratio:1;margin:0 auto}
+.orbit .ring{position:absolute;inset:8%;border-radius:50%;border:1px dashed rgba(71,178,255,.35);animation:spin 60s linear infinite}
+.orbit .ring2{position:absolute;inset:24%;border-radius:50%;border:1px solid rgba(228,177,77,.25)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orbit .core{position:absolute;inset:30%;border-radius:50%;overflow:hidden;box-shadow:0 0 0 6px rgba(71,178,255,.15),0 30px 60px rgba(0,0,0,.5)}
+.orbit .core img{width:100%;height:100%;object-fit:cover;transition:opacity .5s}
+.orbit .nd{position:absolute;width:118px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;color:#cfe0f3;font:700 12px/1.3 Manrope;text-align:center;padding:0}
+.orbit .nd span{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--navy2);border:1.5px solid var(--line);font:600 13px 'JetBrains Mono';transition:all .3s}
+.orbit .nd.on span{background:var(--gold);color:var(--navy);border-color:var(--gold);box-shadow:0 0 0 8px rgba(228,177,77,.15)}
+.orbit .nd.on{color:#fff}
+.oinfo{border-radius:26px;padding:34px;min-height:280px}
+.oinfo h3{font:600 30px/1.15 var(--display);margin:12px 0}
+.oinfo p{color:#b9cde3;line-height:1.75;margin:0}
+/* horizontal tour */
+#tour{position:relative}
+#tour .stick{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding-top:118px;box-sizing:border-box}
+.track{display:flex;gap:28px;padding:0 max(32px,calc((100vw - 1300px)/2 + 32px));will-change:transform}
+.slide{flex:0 0 min(86vw,1080px);height:min(calc(100vh - 340px),600px);border-radius:30px;overflow:hidden;position:relative;border:1px solid var(--line);background:var(--navy2);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.slide .txt{position:relative;padding:38px 36px;display:flex;flex-direction:column;justify-content:center;gap:4px;background:linear-gradient(160deg,#0b2c52,#061a33)}
+.slide .n{font:800 110px/1 var(--display);position:absolute;right:22px;top:14px;color:transparent;-webkit-text-stroke:1.5px rgba(71,178,255,.35)}
+.slide h3{font:600 clamp(22px,2.2vw,30px) var(--display);margin:12px 0 10px;position:relative}.slide p{margin:0 0 14px;color:#cfe0f3;line-height:1.65;position:relative}
+.slide .ts span{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;margin:0 6px 6px 0}
+.slide .clip{margin-top:16px;display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:16px;padding:8px 16px 8px 8px;color:#fff;font:700 14px Manrope;width:max-content;position:relative;transition:background .2s}
+.slide .clip:hover{background:rgba(228,177,77,.15)}
+.slide .clip img{width:84px;height:52px;object-fit:cover;border-radius:10px;filter:brightness(.7)}
+.slide .clip b{position:absolute;left:8px;width:84px;height:52px;display:grid;place-items:center;color:var(--gold);font-size:18px}
+.slide .ph{margin:0;position:relative;overflow:hidden;background:#000}
+.slide .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s}
+.slide:hover .ph img{transform:scale(1.04)}
+.slide .ph figcaption{position:absolute;left:16px;bottom:16px;background:rgba(5,20,40,.75);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font:600 12px Manrope;color:#eaf3ff}
+@media(max-width:800px){.slide{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:min(80vh,720px)}.slide .txt{padding:24px}.slide .n{font-size:70px}}
+.tourhead{padding:0 max(32px,calc((100vw - 1300px)/2 + 32px));margin-bottom:26px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.tprog{height:3px;background:rgba(255,255,255,.08);margin:26px max(32px,calc((100vw - 1300px)/2 + 32px)) 0;border-radius:3px;overflow:hidden}.tprog i{display:block;height:100%;width:0;background:var(--gold)}
+/* configurator */
+.cfg{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;margin-top:40px}
+@media(max-width:950px){.cfg{grid-template-columns:1fr}}
+.cfg .ctl{border-radius:28px;padding:30px;display:flex;flex-direction:column;gap:26px}
+.cfg label.t{font:600 11px 'JetBrains Mono';letter-spacing:.18em;color:var(--gold);display:block;margin-bottom:12px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{border:1px solid var(--line);background:rgba(255,255,255,.03);color:#cfe0f3;border-radius:14px;padding:12px 16px;font:700 14px Manrope;min-height:46px;transition:all .2s}
+.seg button.on{background:var(--sky);color:var(--navy);border-color:var(--sky)}
+.cfg input[type=range]{width:100%;accent-color:var(--gold);height:32px}
+.cfg .val{font:800 34px var(--display)}
+.sheet{border-radius:28px;background:var(--paper);color:var(--ink);padding:30px;position:relative;overflow:hidden;background-image:linear-gradient(rgba(22,99,214,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(22,99,214,.07) 1px,transparent 1px);background-size:22px 22px}
+.sheet .hd{display:flex;justify-content:space-between;border-bottom:2px solid var(--navy);padding-bottom:12px;font:600 11px 'JetBrains Mono';letter-spacing:.14em;color:var(--blue)}
+.sheet h3{font:600 26px var(--display);color:var(--navy);margin:18px 0 6px}
+.sheet .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.sheet .meta div{border:1px solid #cbd5e1;border-radius:12px;padding:10px;background:#fff}.sheet .meta small{display:block;font:600 10px 'JetBrains Mono';color:var(--muted);letter-spacing:.1em}.sheet .meta b{font:800 15px Manrope}
+.sheet ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.sheet li{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px;font-weight:700;animation:pop .4s ease both}
+.sheet li i{width:22px;height:22px;border-radius:6px;background:var(--navy);color:#fff;display:grid;place-items:center;font:600 11px 'JetBrains Mono';font-style:normal;flex:none}
+.sheet li.link i{background:var(--gold);color:var(--navy)}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sheet .stamp{position:absolute;right:22px;bottom:90px;font:800 18px var(--display);color:rgba(22,99,214,.25);border:3px solid rgba(22,99,214,.25);border-radius:8px;padding:4px 12px;transform:rotate(-10deg)}
+.sheet .act{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.sheet .act a,.sheet .act button{background:var(--navy);color:#fff;border:0;border-radius:999px;padding:12px 18px;font:800 13px Manrope;text-decoration:none}
+.sheet .act .o{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+/* slaughter wall */
+.light{background:var(--paper);color:var(--ink)}
+.light .lead{color:var(--muted)}
+.wall{columns:4 260px;column-gap:14px;margin-top:40px}
+.wi{break-inside:avoid;margin:0 0 14px;display:block;width:100%;border:0;padding:0;border-radius:18px;overflow:hidden;position:relative;background:#dfe6ef;transform-style:preserve-3d;transition:transform .2s}
+.wi img{display:block;width:100%;height:auto}
+.wi .v{position:absolute;top:12px;left:12px;background:var(--navy);color:#fff;border-radius:999px;padding:6px 12px;font:600 11px 'JetBrains Mono'}
+.wi .c{position:absolute;inset:auto 0 0 0;padding:14px;background:linear-gradient(transparent,rgba(5,20,40,.9));color:#fff;font-size:13px;text-align:left;transform:translateY(100%);transition:transform .3s}
+.wi:hover .c,.wi:focus-visible .c{transform:none}
+.feat4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:30px}
+@media(max-width:900px){.feat4{grid-template-columns:1fr 1fr}}
+.feat4 div{border-radius:18px;padding:20px;background:#fff;border:1px solid #e2e8f0}.feat4 b{display:block;font:600 16px var(--display);color:var(--navy);margin-bottom:6px}.feat4 span{color:var(--muted);font-size:15px}
+/* cold */
+.cold{background:radial-gradient(ellipse at 70% 0%,#123f6e,#061a33 60%)}
+.thermo{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:stretch;margin-top:40px}
+@media(max-width:900px){.thermo{grid-template-columns:1fr}}
+.dial{width:150px;border-radius:30px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.dial .v{font:800 40px var(--display)}
+.dial input{writing-mode:vertical-lr;direction:rtl;width:40px;height:260px;accent-color:var(--sky)}
+.dial small{font:600 10px 'JetBrains Mono';letter-spacing:.14em;color:#9fc4e6;text-align:center}
+.room{position:relative;border-radius:30px;overflow:hidden;min-height:440px;border:1px solid var(--line)}
+.room img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:filter .4s}
+.room .frost{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(210,235,255,.85) 100%);mix-blend-mode:screen;transition:opacity .4s;pointer-events:none}
+.room .ov{position:absolute;left:20px;top:20px;right:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.room .badge{border-radius:14px;padding:12px 16px}
+.room .badge small{display:block;font:600 10px 'JetBrains Mono';letter-spacing:.14em;color:var(--gold)}.room .badge b{font:600 20px var(--display)}
+.room canvas{position:absolute;left:20px;right:20px;bottom:20px;width:calc(100% - 40px);height:120px;border-radius:16px}
+.room .note{position:absolute;right:30px;bottom:150px;font:600 10px 'JetBrains Mono';color:#cfe0f3;letter-spacing:.12em}
+.cardsx{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+@media(max-width:900px){.cardsx{grid-template-columns:1fr 1fr}}
+.cardsx div{border-radius:18px;padding:18px}
+.cardsx b{display:block;font:600 15px var(--display);margin-bottom:6px}.cardsx span{color:#b9cde3;font-size:14px;line-height:1.5}
+/* schematic */
+.sch{margin-top:40px;border-radius:30px;padding:30px;overflow-x:auto}
+.line{display:flex;align-items:center;min-width:900px;margin:10px 0 26px}
+.line h4{font:600 11px 'JetBrains Mono';letter-spacing:.18em;color:var(--gold);margin:0 0 6px;width:130px;flex:none}
+.tank{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;color:#cfe0f3;padding:0;font:700 13px Manrope;text-align:center}
+.tank .t{width:74px;height:74px;border-radius:18px;border:1.5px solid var(--line);background:rgba(71,178,255,.06);display:grid;place-items:center;position:relative;overflow:hidden;transition:all .3s}
+.tank .t:after{content:"";position:absolute;left:0;right:0;bottom:0;height:var(--lv,40%);background:linear-gradient(0deg,var(--c,#47b2ff),transparent);opacity:.55;animation:wave 3s ease-in-out infinite}
+@keyframes wave{50%{height:calc(var(--lv,40%) + 12%)}}
+.tank.on .t{border-color:var(--gold);box-shadow:0 0 0 6px rgba(228,177,77,.15)}
+.pipe{flex:0 0 50px;height:6px;border-radius:6px;background:rgba(255,255,255,.06);position:relative;overflow:hidden}
+.pipe:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--c,#47b2ff) 0 8px,transparent 8px 18px);animation:flow .6s linear infinite}
+@keyframes flow{to{background-position:18px 0}}
+.energy{--c:#e4b14d}
+.schinfo{border-top:1px solid var(--line);padding-top:18px;display:flex;gap:20px;align-items:baseline;flex-wrap:wrap}
+.schinfo b{font:600 22px var(--display)}.schinfo span{color:#b9cde3}
+/* pivot sim */
+.irr{background:radial-gradient(ellipse at 30% 0%,#0f3d2d,#051428 70%)}
+.sim{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:40px}
+@media(max-width:900px){.sim{grid-template-columns:1fr}}
+#piv{width:min(520px,88vw);aspect-ratio:1;display:block;margin:0 auto;border-radius:50%}
+.simctl{border-radius:24px;padding:24px;display:grid;gap:16px}
+.simctl .r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.simctl button{border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;border-radius:999px;padding:11px 18px;font:700 14px Manrope}
+.simctl input{flex:1;accent-color:#9be37a}
+.cov{font:800 54px var(--display);color:#bdf28a}
+.istats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
+@media(max-width:900px){.istats{grid-template-columns:1fr 1fr}}
+.istats div{border-radius:20px;padding:20px}.istats b{display:block;font:800 36px var(--display);color:#bdf28a}.istats span{font-size:14px;color:#cfe0f3}
+.hotw{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;margin-top:70px}
+@media(max-width:900px){.hotw{grid-template-columns:1fr}}
+.hot{position:relative;border-radius:26px;overflow:hidden;background:#fff}
+.hot img{display:block;width:100%}
+.hs{position:absolute;width:36px;height:36px;margin:-18px;border-radius:50%;background:var(--gold);border:3px solid #fff;color:var(--navy);font:800 14px Manrope;animation:ping 2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(228,177,77,.6)}100%{box-shadow:0 0 0 18px rgba(228,177,77,0)}}
+.hs.on{background:var(--navy);color:#fff}
+.tip{border-radius:20px;padding:24px;min-height:140px}.tip b{font:600 22px var(--display)}.tip p{color:#cfe0f3;line-height:1.6;margin:8px 0 0}
+.umc{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}
+@media(max-width:900px){.umc{grid-template-columns:1fr 1fr}}
+.uc{aspect-ratio:3/4;position:relative;border:0;padding:0;background:none;perspective:1200px;cursor:pointer}
+.uc .in{position:absolute;inset:0;display:block;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.7,.2,1);will-change:transform}
+.uc:hover .in,.uc:focus-visible .in,.uc.on .in{transform:rotateY(180deg)}
+.uc .f,.uc .b{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;overflow:hidden}
+.uc .f{background:#fff}.uc .f img{width:100%;height:78%;object-fit:cover;display:block}.uc .f b{display:block;padding:12px;color:var(--ink);font:600 15px var(--display)}
+.uc .b{transform:rotateY(180deg);background:var(--gold);color:var(--navy);display:flex;flex-direction:column;justify-content:center;padding:20px;text-align:left}
+.uc .b b{font:800 30px var(--display)}.uc .b span{font-weight:700}
+.svc3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+@media(max-width:900px){.svc3{grid-template-columns:1fr}}
+.svc3 div{border-radius:22px;padding:26px}.svc3 small{font:600 11px 'JetBrains Mono';color:var(--gold);letter-spacing:.16em}.svc3 b{display:block;font:600 20px var(--display);margin:8px 0}.svc3 span{color:#cfe0f3;line-height:1.6}
+/* team */
+.disc{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
+@media(max-width:900px){.disc{grid-template-columns:1fr 1fr}}
+.disc div{border-radius:20px;padding:22px;border:1px solid var(--line);background:var(--navy2);position:relative;overflow:hidden}
+.disc div:before{content:"";position:absolute;inset:0;background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(228,177,77,.14),transparent 40%);opacity:0;transition:opacity .3s}
+.disc div:hover:before{opacity:1}
+.disc small{font:600 11px 'JetBrains Mono';color:var(--gold)}.disc b{display:block;font:600 17px var(--display);margin:10px 0 6px}.disc span{color:#b9cde3;font-size:14px;line-height:1.55}
+.vmc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+@media(max-width:900px){.vmc{grid-template-columns:1fr}}
+.vmc div{border-radius:22px;padding:26px;background:linear-gradient(160deg,var(--navy3),var(--navy2));border:1px solid var(--line)}
+.vmc b{display:block;font:600 22px var(--display);color:var(--gold);margin-bottom:10px}.vmc p{margin:0;color:#cfe0f3;line-height:1.7}
+/* presence */
+.pres{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:40px}
+@media(max-width:900px){.pres{grid-template-columns:1fr}}
+.clock{border-radius:26px;padding:26px;display:flex;flex-direction:column;gap:10px}
+.clock .t{font:800 48px var(--display);letter-spacing:-.02em}
+.clock small{font:600 11px 'JetBrains Mono';letter-spacing:.16em;color:var(--gold)}
+.clock b{font:600 20px var(--display)}.clock span{color:#b9cde3;font-size:14px;line-height:1.6}
+.clock .live{display:inline-flex;align-items:center;gap:6px;font:600 11px 'JetBrains Mono';color:#6be38f}.clock .live:before{content:"";width:7px;height:7px;border-radius:50%;background:#6be38f;animation:bl 1.4s infinite}
+@keyframes bl{50%{opacity:.2}}
+.reg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:900px){.reg{grid-template-columns:1fr}}
+.reg div{border:1px dashed rgba(228,177,77,.5);border-radius:18px;padding:18px}.reg b{display:block;font:600 16px var(--display)}.reg span{color:#b9cde3;font-size:14px}
+/* ai + contact */
+.term{border-radius:28px;overflow:hidden;display:grid;grid-template-columns:1.5fr 1fr}
+@media(max-width:900px){.term{grid-template-columns:1fr}}
+.term .chat{height:600px;padding:20px;display:flex;flex-direction:column;border-right:1px solid var(--line)}
+.term .side{padding:34px;display:flex;flex-direction:column;gap:16px;justify-content:center}
+.term .bd-enq{background:var(--paper);color:var(--ink);border:0;font-family:'JetBrains Mono'}
+.term .bd-enq .bd-btn{border-color:var(--blue);color:var(--blue)}.term .bd-enq .bd-btn.solid{background:var(--blue);color:#fff}
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px}
+@media(max-width:900px){.cgrid{grid-template-columns:1fr 1fr}}
+.ci{border-radius:16px;padding:18px}.ci small{display:block;font:600 10px 'JetBrains Mono';letter-spacing:.16em;color:var(--gold);margin-bottom:6px}.ci b{font:700 15px Manrope;word-break:break-word}
+.form{margin-top:30px;background:var(--paper);color:var(--ink);border-radius:28px;padding:34px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.form{grid-template-columns:1fr}}
+.form h3{grid-column:1/-1;font:600 28px var(--display);color:var(--navy)}.form .hint{grid-column:1/-1;margin:-6px 0 0;color:var(--muted)}
+.form label{display:flex;flex-direction:column;gap:6px;font:700 13px Manrope}
+.form input,.form select,.form textarea{border:1px solid #cbd5e1;border-radius:12px;padding:13px;font:16px Manrope;color:var(--ink);background:#fff}
+.form .full{grid-column:1/-1}.form textarea{min-height:120px}
+.form .act{grid-column:1/-1;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.form .act button{background:var(--navy);color:#fff;border:0;border-radius:999px;padding:0 26px;min-height:50px;font:800 15px Manrope}
+.form small{color:var(--muted)}
+.form .done{grid-column:1/-1;display:none;background:#fff;border:1px dashed var(--blue);border-radius:14px;padding:14px;white-space:pre-wrap;font:14px/1.6 'JetBrains Mono'}
+footer{border-top:1px solid var(--line);padding:30px 0;color:#9fb7d1;font-size:13px}footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.lbx{position:fixed;inset:0;z-index:160;background:rgba(3,10,22,.95);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:20px}
+.lbx.open{display:flex}.lbx .st{width:min(1100px,94vw);height:min(74vh,780px);display:grid;place-items:center}
+.lbx .st img,.lbx .st video{max-width:100%;max-height:100%;border-radius:12px;background:#000}
+.lbx .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;text-align:center}
+.lbx button{min-width:48px;min-height:48px;border-radius:50%;border:1px solid var(--line);background:none;color:#fff;font-size:20px}
+.rv{opacity:0;transform:translateY(30px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.orbit .ring{animation:none}}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur2"></div>
+<nav class="dock glass" aria-label="Main">
+<span class="lg"><img src="hd/ocean-logo.png" alt=""></span><b>OCEAN</b>
+<a class="l" href="#about">About</a><a class="l" href="#solutions">Solutions</a><a class="l" href="#tour">Site Tour</a><a class="l" href="#plan">Plan a project</a><a class="l" href="#irrigation">Irrigation</a><a class="l" href="#presence">Presence</a>
+<button class="k" type="button" id="kbtn" aria-label="Open quick navigation">Jump to <kbd>⌘K</kbd></button>
+<button class="lang" type="button" data-lang-toggle>عربي</button>
+<a class="q" href="#contact">Request a Quote</a>
+</nav>
+<div class="pal" id="pal" role="dialog" aria-label="Quick navigation"><div class="box glass"><input id="palin" placeholder="Where to? Try “pivot”, “cold store”, “quote”…" aria-label="Search sections"><ul id="pallist"></ul></div></div>
+
+<section id="build" aria-label="A livestock shed assembling in 3D as you scroll">
+<div class="stick" id="stick">
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="vign"></div>
+<div class="hcopy" id="hcopy">
+<div class="chips"><span>SULTANATE OF OMAN</span><span>ISLAMIC REPUBLIC OF MAURITANIA</span></div>
+<h1 data-ar="نصمّم، ننفّذ <span class='grad'>ونُشغّل.</span>">We design, build and <span class="grad">commission.</span></h1>
+<p>Slaughterhouses, meat cold stores, wastewater and biogas systems, steel structures and centre-pivot irrigation, from the first 3D model to a plant that runs.</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn gold" href="#tour">Take the site tour →</a><a class="btn" href="#plan">Discuss your project</a></div>
+</div>
+<div class="hud glass" id="hud" aria-hidden="true">
+<div class="row"><span>MODEL</span><b>LIVESTOCK SHED</b></div>
+<div class="row"><span>PHASE</span><b class="g" id="hPhase">01 · DESIGN</b></div>
+<div class="row"><span>ELEMENTS PLACED</span><b id="hCount">0</b></div>
+<div class="row"><span>VIEW</span><b id="hView">BLUEPRINT</b></div>
+<div class="bar"><i id="hBar"></i></div>
+</div>
+<div class="phase glass" id="phase" aria-live="polite"></div>
+<div class="steps" id="steps"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="drag">SCROLL TO BUILD · DRAG TO ORBIT</div>
+</div>
+</section>
+
+<div class="stats">
+<div><b class="grad" data-count="35" data-suffix="+">0</b><span>years of experience through our founders and technical teams</span></div>
+<div><b class="grad" data-count="2">0</b><span>countries: Oman and Mauritania</span></div>
+<div><b class="grad" data-count="7">0</b><span>engineering disciplines under one team</span></div>
+<div><b class="grad" data-count="90" data-suffix="%+">0</b><span>spray uniformity on our pivot irrigation systems</span></div>
+</div>
+
+<section id="about" class="pad"><div class="wrap">
+<span class="tag"><i></i>Who we are</span>
+<h2 style="margin-top:18px;max-width:1000px">One team, from the drawing board to the <span class="grad">working plant</span></h2>
+<div class="bento">
+<div class="cell rv" style="grid-column:span 3;grid-row:span 2"><h3>OCEAN Engineering &amp; Investment</h3><p>develops and delivers integrated engineering, industrial and environmental projects, backed by a multidisciplinary team.</p><p>Our strength is our team's experience in engineering design, steel structures, modern slaughterhouses, chilling and freezing, wastewater and waste treatment, and turning organic waste into biogas.</p></div>
+<div class="cell ph rv" style="grid-column:span 3;grid-row:span 2"><img src="hd/work-platforms.jpg" alt="Conveyor and work platforms along a slaughter line"><div class="cap"><span class="tag"><i></i>Real plant</span></div></div>
+<div class="cell ph rv" style="grid-column:span 2;grid-row:span 2"><img src="hd/steel-frame.jpg" alt="Steel frame of a livestock shed"></div>
+<div class="cell rv" style="grid-column:span 2;grid-row:span 2"><p style="margin:0">We start by studying each project's needs and preparing concepts and technical designs, then coordinate supply, fabrication and installation through to construction and fit-out, with close attention to quality, safety, operating efficiency and the environment.</p></div>
+<div class="cell rv" style="grid-column:span 2;grid-row:span 2;background:var(--gold);color:var(--navy);border-color:var(--gold)"><b style="font:800 76px/1 Unbounded">35+</b><p style="color:var(--navy);font-weight:700">years of hands-on experience, including major agricultural projects in Sudan</p></div>
+<div class="cell rv" style="grid-column:span 6;grid-row:span 1;display:flex;align-items:center;flex-wrap:wrap;gap:4px"><span class="pill">◆ 3D design &amp; engineering studies</span><span class="pill">◆ Fabrication, supply &amp; installation</span><span class="pill">◆ Quality, safety &amp; hygiene</span><span class="pill">◆ Environmental sustainability</span></div>
+</div>
+</div></section>
+
+<section id="solutions" class="pad" style="padding-top:20px"><div class="wrap">
+<span class="tag"><i></i>What we deliver</span>
+<h2 style="margin-top:18px">One partner across <span class="grad">the whole chain</span></h2>
+<p class="lead" style="margin-top:14px;max-width:720px">From the steel frame to the pivot in the field, our solutions connect. Pick a discipline on the orbit.</p>
+<div class="orbitwrap">
+<div class="orbit" id="orbit"><div class="ring"></div><div class="ring2"></div><div class="core"><img id="oimg" src="hd/steel-frame.jpg" alt=""></div></div>
+<div class="oinfo glass" id="oinfo" aria-live="polite"></div>
+</div>
+</div></section>
+
+<section id="tour" aria-label="Site tour">
+<div class="stick">
+<div class="tourhead"><div><span class="tag"><i></i>Tour our site</span><h2 style="margin-top:14px;font-size:clamp(30px,3.6vw,54px)">Walk through a slaughterhouse complex, <span class="grad">step by step</span></h2></div><span class="mono" style="color:#9fc4e6;font-size:12px;letter-spacing:.14em" id="tcount">01 / 07</span></div>
+<div class="track" id="track"></div>
+<div class="tprog"><i id="tprog"></i></div>
+</div>
+</section>
+
+<section id="plan" class="pad"><div class="wrap">
+<span class="tag"><i></i>Plan a project</span>
+<h2 style="margin-top:18px">Build your project brief <span class="grad">in seconds</span></h2>
+<p class="lead" style="margin-top:14px;max-width:760px">Tell us the facility, capacity and location. The brief updates live with the OCEAN modules involved — then send it straight to our engineers.</p>
+<div class="cfg">
+<div class="ctl glass">
+<div><label class="t">01 · Facility</label><div class="seg" id="fac"></div></div>
+<div id="spWrap"><label class="t">02 · Species</label><div class="seg" id="sp"></div></div>
+<div><label class="t" id="capL">03 · Capacity</label><div class="val" id="capV">—</div><input type="range" id="cap" aria-labelledby="capL"></div>
+<div><label class="t">04 · Location</label><div class="seg" id="loc"></div></div>
+</div>
+<div class="sheet" id="sheet" aria-live="polite"></div>
+</div>
+</div></section>
+
+<section id="slaughter" class="light pad"><div class="wrap">
+<span class="tag" style="color:#c8952f"><i style="background:#c8952f"></i>Slaughterhouse engineering</span>
+<h2 style="margin-top:18px;color:var(--navy)">Built for hygiene, speed and safe handling</h2>
+<p class="lead" style="margin-top:14px">Real photos and films from our slaughter lines. Tilt the cards, open any picture, or play a film.</p>
+<div class="feat4">
+<div><b>Rotary restraining box</b><span>Fabricated in our workshop, tested on site.</span></div>
+<div><b>Overhead rails &amp; conveyors</b><span>Powered lines that move every carcass.</span></div>
+<div><b>Bleeding &amp; dressing stations</b><span>Stainless-steel troughs and platforms.</span></div>
+<div><b>Processing halls</b><span>Worktables, conveyors and washable floors.</span></div>
+</div>
+<div class="wall" id="wall"></div>
+<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:26px;padding:24px;margin-top:30px"><img src="hd/brochure-cover.jpg" alt="Catalogue cover" style="width:170px;border-radius:12px"><div style="flex:1 1 300px"><span class="tag"><i></i>PDF · 39 pages · in English</span><h3 style="font:600 24px Unbounded;margin:8px 0">Slaughterhouse equipment catalogue</h3><p style="color:#b9cde3;margin:0 0 14px;line-height:1.6">Photos of every unit we supply: cattle, camel and sheep lines, carcass processing, chilling rails, deboning and packing, compressed air, holding pens and steam boilers.</p><a class="btn gold" href="https://ocean-ei.com/assets/docs/ocean-slaughterhouse-equipment.pdf" target="_blank" rel="noopener">Download catalogue ↗</a></div></div>
+</div></section>
+
+<section id="cold" class="cold pad"><div class="wrap">
+<span class="tag"><i></i>Meat cold storage</span>
+<h2 style="margin-top:18px">Cold chains that protect <span class="grad">every cut</span></h2>
+<p class="lead" style="margin-top:14px;max-width:900px">We design, supply and build meat chilling and freezing stores that protect quality and safety, extend shelf life and run efficiently. Rooms of every size and capacity, with high-efficiency insulation, industrial refrigeration units and precise control of temperature and humidity, matched to the products stored and the demands of the food supply chain.</p>
+<div class="thermo">
+<div class="dial glass"><small>SET-POINT</small><span class="v" id="tv">−18°</span><input type="range" id="tin" min="-18" max="4" value="-18" aria-label="Room temperature set-point"><small id="tm">FREEZER STORE</small></div>
+<div class="room" id="room"><img src="hd/processing-hall.jpg" alt="Processing hall with stainless-steel worktables"><div class="frost" id="frost"></div>
+<div class="ov"><div class="badge glass"><small>ROOM MODE</small><b id="rmode">Freezer store</b></div><div class="badge glass"><small>MONITORING</small><b id="ralarm">Within limits</b></div></div>
+<span class="note">MONITORING VIEW · INTERACTIVE ILLUSTRATION</span>
+<canvas id="mon" aria-hidden="true"></canvas></div>
+</div>
+<p class="lead" style="margin-top:20px;font-size:16px">Our solutions also cover chillers for hanging carcasses, meat preparation and handling areas, loading and unloading, and monitoring that keeps conditions stable throughout storage.</p>
+<div class="cardsx">
+<div class="glass"><b>Fresh meat chilling rooms</b><span>Chilled meat held at the right temperatures, in line with health requirements.</span></div>
+<div class="glass"><b>Meat freezing stores</b><span>Long-term freezing, designed around the products and capacity required.</span></div>
+<div class="glass"><b>Carcass hanging systems</b><span>Fittings for hygienic, efficient storage and handling.</span></div>
+<div class="glass"><b>Insulation panels</b><span>Sandwich panels that cut heat loss and energy use.</span></div>
+<div class="glass"><b>Industrial refrigeration</b><span>Units sized for the performance and reliability you need.</span></div>
+<div class="glass"><b>Control &amp; monitoring</b><span>Temperatures tracked, with an alarm when limits are crossed.</span></div>
+<div class="glass"><b>Design &amp; build</b><span>Study, supply, installation and commissioning in one contract.</span></div>
+<div style="background:var(--gold);color:var(--navy)"><b>Planning a cold store?</b><span style="color:var(--navy)">Tell us the products, capacity and location, and we will propose a solution.</span></div>
+</div>
+</div></section>
+
+<section id="wastewater" class="pad"><div class="wrap">
+<span class="tag"><i></i>Wastewater &amp; waste treatment</span>
+<h2 style="margin-top:18px;max-width:1000px">Turning slaughterhouse waste into <span class="grad">clean water and energy</span></h2>
+<p class="lead" style="margin-top:14px">We design and build systems that treat the wastewater from slaughter, processing and cleaning, and put organic waste to work as biogas. Tap any stage of the live schematic.</p>
+<div class="sch glass" id="sch"></div>
+<p style="margin-top:30px;font:600 clamp(20px,2.4vw,30px)/1.4 Unbounded;max-width:1000px;border-left:3px solid var(--gold);padding-left:24px">Waste is not just an environmental burden. Managed and treated correctly, it is a resource, and a traditional slaughterhouse can become a cleaner, more efficient plant.</p>
+</div></section>
+
+<section id="irrigation" class="irr pad"><div class="wrap">
+<div style="display:flex;gap:14px;align-items:center;margin-bottom:18px"><img src="hd/al-moheet-logo.jpg" alt="Al-Moheet logo" style="width:60px;height:60px;border-radius:12px;background:#fff;object-fit:contain"><span class="mono" style="font-size:12px;color:#cfe0f3;letter-spacing:.1em">AL-MOHEET ENGINEERING &amp; INVESTMENT · MAURITANIA</span></div>
+<span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>OCEAN Irrigation</span>
+<h2 style="margin-top:18px">Precision irrigation for <span style="color:#bdf28a">abundant harvests</span></h2>
+<p class="lead" style="margin-top:14px;color:#d8ecd4">Centre-pivot systems that water every centimetre of land evenly: efficient, water-saving, smart and built to last. Run the pivot below and watch it cover the field.</p>
+<div class="sim">
+<canvas id="piv" width="640" height="640" aria-label="Interactive centre-pivot simulation" role="img"></canvas>
+<div class="simctl glass">
+<span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>Pivot simulator</span>
+<div><div class="cov" id="cov">0%</div><span style="color:#cfe0f3">of the field watered this run</span></div>
+<div class="r"><button type="button" id="pPlay">❚❚ Pause</button><button type="button" id="pReset">↺ Reset field</button></div>
+<label class="r" style="color:#cfe0f3;font-weight:700">Speed<input type="range" id="pSpd" min="1" max="10" value="4" aria-label="Simulation speed"></label>
+<p style="margin:0;color:#9fb7d1;font-size:13px">Interactive illustration. Remote control from a phone, automatic restart after a water or power cut, works through the night.</p>
+</div>
+</div>
+<div class="istats">
+<div class="glass"><b data-count="90" data-suffix="%+">0</b><span>spray uniformity with I-WOB heads and pressure regulators</span></div>
+<div class="glass"><b data-count="20" data-suffix=" yrs">0</b><span>service life, hot-dip galvanised throughout</span></div>
+<div class="glass"><b data-count="30" data-suffix="%">0</b><span>slopes climbed by the flexible truss structure</span></div>
+<div class="glass"><b data-count="24" data-suffix=" h">0</b><span>after-sales response, with a full spare-parts supply</span></div>
+</div>
+<div class="hotw">
+<div class="hot" id="hot"><img src="hd/irr-tower-3d.jpg" alt="3D model of the robust centre pivot"></div>
+<div><span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>Tap the numbered points</span><h3 style="font:600 32px Unbounded;margin:14px 0 18px">Inside the centre pivot</h3><div class="tip glass" id="tip" aria-live="polite"></div>
+<a class="btn" style="margin-top:18px" href="https://ocean-ei.com/assets/docs/ocean-irrigation-brochure.pdf" target="_blank" rel="noopener">Get the brochure (PDF · 17 pages · French) ↗</a></div>
+</div>
+<div style="margin-top:90px"><span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>Why choose OCEAN</span><h2 style="margin-top:14px;font-size:clamp(28px,3.6vw,52px)">Engineered for the field, ready for the future</h2></div>
+<div class="svc3">
+<div class="glass"><b>Built to resist</b><span>Hot-dip galvanised from end to end, unafraid of humidity or salinity, for a life of up to 20 years.</span></div>
+<div class="glass"><b>Even water, higher yields</b><span>I-WOB spray heads and pressure regulators give better than 90% uniformity, so water and fertiliser reach every plant.</span></div>
+<div class="glass"><b>Any terrain</b><span>A flexible truss structure follows rolling land and climbs slopes of up to 30%.</span></div>
+<div class="glass"><b>Smart and unattended</b><span>Restarts on its own after a water or power cut, is controlled remotely from a phone and works through the night.</span></div>
+<div class="glass"><b>Scale your farm</b><span>One machine covers vast areas, freeing labour and making farm management data-driven.</span></div>
+</div>
+<div style="margin-top:90px"><span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>The power heart</span><h2 style="margin-top:14px;font-size:clamp(28px,3.6vw,52px)">UMC motors and speed reducers</h2><p class="lead" style="color:#d8ecd4;margin-top:14px;max-width:860px">The UMC motor and reducer drive every tower. They are reliable, efficient and suited to harsh conditions, which is why they are the standard choice for pivots worldwide. Hover or tap a part to flip it.</p></div>
+<div class="umc">
+<button class="uc" type="button"><span class="in"><div class="f"><img src="hd/umc-gearbox.jpg" alt="UMC gearbox"><b>Gearboxes</b></div><div class="b"><b>95%</b><span>transmission efficiency with helical gearing</span></div></span></button>
+<button class="uc" type="button"><span class="in"><div class="f"><img src="hd/umc-booster.jpg" alt="UMC booster pump"><b>Booster pumps</b></div><div class="b"><b>1 &amp; 3 phase</b><span>dual voltage, for use anywhere in the world</span></div></span></button>
+<button class="uc" type="button"><span class="in"><div class="f"><img src="hd/umc-drive.jpg" alt="UMC centre drive"><b>Centre drives</b></div><div class="b"><b>126.2 N·m</b><span>output torque (40:1 reduction ratio)</span></div></span></button>
+<button class="uc" type="button"><span class="in"><div class="f"><img src="hd/umc-couplers.jpg" alt="UMC couplers"><b>Couplers</b></div><div class="b"><b>28–86 rpm</b><span>output speed, depending on model</span></div></span></button>
+</div>
+<div style="margin-top:90px"><span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>Choose OCEAN, choose peace of mind</span><h2 style="margin-top:14px;font-size:clamp(28px,3.6vw,52px)">With you before, during and after the sale</h2></div>
+<div class="svc3">
+<div class="glass"><small>01 · BEFORE THE SALE</small><b>Free plot survey</b><span>Our technicians survey your plot free of charge and prepare a planned layout for the system.</span></div>
+<div class="glass"><small>02 · DURING INSTALLATION</small><b>Engineer on site</b><span>An engineer guides the installation on site, making sure every bolt is in place.</span></div>
+<div class="glass"><small>03 · AFTER THE SALE</small><b>24-hour response</b><span>A complete spare-parts supply and a 24-hour response service keep you running.</span></div>
+</div>
+</div></section>
+
+<section id="team" class="pad"><div class="wrap">
+<span class="tag"><i></i>Our team</span>
+<h2 style="margin-top:18px">The expertise behind <span class="grad">every project</span></h2>
+<p class="lead" style="margin-top:14px">Our team's experience spans the engineering and technical fields that integrated projects depend on.</p>
+<div class="disc">
+<div><small>01</small><b>Engineering &amp; design</b><span>Concepts, technical drawings and the right solution for each project.</span></div>
+<div><small>02</small><b>Steel structures</b><span>Hangars, warehouses and industrial buildings.</span></div>
+<div><small>03</small><b>Slaughterhouse engineering</b><span>Slaughter facilities, meat processing and animal products.</span></div>
+<div><small>04</small><b>Chilling &amp; freezing</b><span>Cold rooms, freezer stores and meat preservation.</span></div>
+<div><small>05</small><b>Environmental treatment</b><span>Wastewater and slaughterhouse waste, with less impact.</span></div>
+<div><small>06</small><b>Bioenergy</b><span>Using organic waste to produce biogas and energy.</span></div>
+<div><small>07</small><b>Project management</b><span>Requirements, supply and construction, coordinated across disciplines.</span></div>
+<div style="background:var(--gold);color:var(--navy);border-color:var(--gold)"><small style="color:var(--navy)">→</small><b>Have a project in mind?</b><span style="color:var(--navy)">Tell us what you are planning, and we will propose a solution.</span></div>
+</div>
+<div class="vmc">
+<div><b>Our vision</b><p>To be a trusted partner in integrated engineering and industrial projects, using our team's expertise and modern technology to deliver solutions of lasting value.</p></div>
+<div><b>Our mission</b><p>To put our expertise to work on high-efficiency projects that combine quality construction, safe operation, environmental protection and our clients' goals.</p></div>
+<div><b>Our commitment</b><p>Careful planning, effective coordination and respect for technical specifications, with solutions that fit each client's needs and each project's operating conditions.</p></div>
+</div>
+</div></section>
+
+<section id="presence" class="pad" style="padding-top:20px"><div class="wrap">
+<span class="tag"><i></i>Where we work</span>
+<h2 style="margin-top:18px">Two countries, <span class="grad">one team</span></h2>
+<p class="lead" style="margin-top:14px">Engineering and fabrication from Oman, agricultural and irrigation projects in Mauritania, and experience that includes major agricultural projects in Sudan.</p>
+<div class="pres">
+<div class="clock glass"><span class="live">LOCAL TIME</span><div class="t" data-tz="Asia/Muscat">--:--</div><small>SULTANATE OF OMAN · ENGINEERING &amp; FABRICATION</small><b>Salalah · Muscat · Barka</b><span>Workshop · Raysut Industrial Area, Madayn 2<br>Head office · Al Qurm, P.O. Box 14, P.C. 133<br>Registered place of activity · Al Hafri Al Janoubiya, South Al Batinah<br>+968 9124 0816 · +968 9191 2329</span></div>
+<div class="clock glass"><span class="live">LOCAL TIME</span><div class="t" data-tz="Africa/Nouakchott">--:--</div><small>MAURITANIA · IRRIGATION &amp; AGRICULTURE</small><b>Al-Moheet Engineering &amp; Investment</b><span>Pivot irrigation, hydraulic networks, pumps, farm machinery and technical supervision<br>+222 2770 5181 · +222 4132 0888</span></div>
+
+</div>
+<p class="lead" style="margin-top:22px;font-size:16px">Partnerships with regional and international manufacturers of irrigation and agricultural equipment.</p>
+<div class="reg"><div><b>Oman Chamber of Commerce and Industry</b><span>Member · Membership No. 855179</span></div><div><b>Ministry of Commerce, Industry and Investment Promotion</b><span>Commercial Registration No. 1626273 · registered 2025</span></div></div>
+</div></section>
+
+<section id="ai" class="pad" style="padding-top:20px"><div class="wrap">
+<div class="term glass"><div class="chat" data-chat="full"></div><div class="side"><span class="tag"><i></i>OCEAN AI</span><h2 style="font-size:clamp(28px,3vw,44px)">Scope it in <span class="grad">one chat</span></h2><p class="lead" style="font-size:16px">Ask about slaughter lines, cold stores, biogas, steel sheds or pivots — in English, Arabic or French. OCEAN AI drafts a request for quotation for our engineers.</p><p style="margin:0;color:#9fb7d1;font-size:13px">Every proposal is prepared by our engineers after reviewing your requirements.</p></div></div>
+</div></section>
+
+<section id="contact" class="pad" style="padding-top:20px"><div class="wrap">
+<span class="tag"><i></i>Contact</span>
+<h2 style="margin-top:18px">Let's build your <span class="grad">next project</span></h2>
+<p class="lead" style="margin-top:14px">Tell us about the facility, its capacity and location, and our engineers will come back to you with a proposal.</p>
+<div class="cgrid">
+<div class="ci glass" style="grid-column:span 2"><small>OFFICE ADDRESS</small><b>No. 61, 6th Floor, Adham Tower, Nakhala Road, Barka, Sultanate of Oman</b></div>
+<div class="ci glass"><small>MOBILE · OMAN</small><b>+968 9124 0816</b></div><div class="ci glass"><small>TELEFAX · OMAN</small><b>+968 9191 2329</b></div>
+<div class="ci glass"><small>MAURITANIA</small><b>+222 2770 5181</b></div><div class="ci glass"><small>MOBILE · MAURITANIA</small><b>+222 2247 4745</b></div>
+<div class="ci glass"><small>MOBILE · SUDAN</small><b>+249 123 110 001</b></div><div class="ci glass"><small>MOBILE · CHINA</small><b>+86 166 2841 9851</b></div>
+<div class="ci glass"><small>EMAIL</small><b><a href="mailto:info@ocean-ei.com">info@ocean-ei.com</a><br><a href="mailto:Oceannvst@gmail.com">Oceannvst@gmail.com</a></b></div><div class="ci glass"><small>WORKSHOP</small><b>Raysut Industrial Area, Salalah</b></div><div class="ci glass"><small>C.R. NO.</small><b>1626373</b></div>
+</div>
+<form class="form" id="form" novalidate>
+<h3>Send us a message</h3><p class="hint">Please include the type of project, the capacity and the location.</p>
+<label>Full name *<input name="name" required autocomplete="name"></label><label>Company (optional)<input name="company"></label>
+<label>Email *<input name="email" type="email" required autocomplete="email"></label><label>Phone (optional)<input name="phone" type="tel"></label>
+<label class="full">Subject<select name="subject"><option>Slaughterhouse project</option><option>Cold storage</option><option>Wastewater treatment or biogas</option><option>Steel structures</option><option>Pivot irrigation</option><option>General enquiry</option></select></label>
+<label class="full">Your enquiry *<textarea name="msg" required></textarea></label>
+<div class="act"><button type="submit">Send enquiry</button><small>Your enquiry is emailed directly to the company. Your details are used only to reply to you.</small></div>
+<div class="done" id="done" aria-live="polite"></div>
+</form>
+</div></section>
+<footer><div class="wrap"><span>© OCEAN Engineering &amp; Investment SPC · Sultanate of Oman</span><span>ocean-ei.com</span></div></footer>
+<div class="lbx" id="lbx" role="dialog" aria-label="Media viewer"></div>
+
+<script>
+var VID = "https://ocean-ei.com/assets/media/"; window.ROOFSIGN = 1;
+window.SITE_AI_NAME = "OCEAN AI"; window.SITE_WA = "96891240816"; window.SITE_EMAIL = "Oceannvst@gmail.com"; window.SITE_PHONE = "+968 9124 0816";
+window.SITE_ENQ_LABELS = ["Project", "Capacity", "Location"];
+window.SITE_PLACEHOLDER = "Describe your project — e.g. a cattle slaughterhouse, 300 head/day, Muscat";
+window.SITE_HELLO = "Hello! I’m OCEAN AI. Tell me what you’re planning — a slaughterhouse, cold store, wastewater or biogas plant, steel shed or pivot irrigation — and I’ll draft a request for quotation.";
+window.SITE_CHIPS = ["What do you design and build?", "Pivot irrigation specs", "Cold store in Salalah", "Biogas from slaughter waste", "ما هي خدماتكم؟"];
+window.SITE_KB = {
+  about: "OCEAN Engineering & Investment designs, builds and commissions slaughterhouses, meat cold stores, wastewater and biogas systems, steel structures and centre-pivot irrigation — from the first 3D model to a plant that runs — in Oman and Mauritania, with 35+ years of experience through our founders and technical teams and 7 engineering disciplines under one team.",
+  slaughter: "We design and equip slaughterhouses: rotary restraining boxes fabricated in our workshop and tested on site, overhead rails and powered conveyors, bleeding and dressing stations with stainless-steel troughs and platforms, and processing halls with worktables, conveyors and washable floors. Our 39-page catalogue covers cattle, camel and sheep lines, chilling rails, deboning and packing, compressed air, holding pens and steam boilers.",
+  cold: "We design, supply and build meat chilling and freezing stores: rooms of every size, high-efficiency sandwich-panel insulation, industrial refrigeration, precise temperature and humidity control, carcass hanging systems and monitoring with alarms — study, supply, installation and commissioning in one contract.",
+  water: "Water line: blood and fat removal at source, screening of suspended solids, physical-chemical and biological treatment, then treated-water reuse at the required quality. Energy line: organic waste and sludge become biogas through anaerobic digestion.",
+  steel: "We design and fabricate hangars, warehouses, livestock sheds and industrial buildings: 3D modelling of the whole site, steel frames, roof trusses and shade structures, concrete feed troughs and painted railings — from bare ground to finished pens.",
+  irrigation: "OCEAN centre pivots (with Al-Moheet Engineering & Investment in Mauritania): better than 90% spray uniformity with I-WOB heads and pressure regulators, up to 20 years’ life hot-dip galvanised, slopes up to 30%, remote phone control and automatic restart, 24-hour after-sales response. UMC drives: 95% efficiency, 126.2 N·m (40:1), 28–86 rpm, 1 & 3 phase.",
+  service: "Before the sale: a free plot survey and planned layout. During installation: an engineer on site. After the sale: a complete spare-parts supply and a 24-hour response service.",
+  price: "Prices depend on scope, capacity, site and specification. I’ve added your request to the RFQ — our engineers will come back to you with a proposal.",
+  contact: "Office: No. 61, 6th Floor, Adham Tower, Nakhala Road, Barka, Oman · +968 9124 0816 · telefax +968 9191 2329 · Mauritania +222 2770 5181 / +222 2247 4745 · Sudan +249 123 110 001 · China +86 166 2841 9851 · Oceannvst@gmail.com.",
+  where: "Engineering and fabrication from Oman (Salalah workshop, Muscat head office, Barka registered activity), irrigation and agriculture in Mauritania with Al-Moheet Engineering & Investment, and experience including major agricultural projects in Sudan.",
+  fallback: "Noted for our engineers. I can tell you about slaughterhouses, cold storage, wastewater and biogas, steel structures, pivot irrigation, our service or how to reach us.",
+  ar: "مرحباً بك! أوشن للهندسة والاستثمار تصمّم وتنفّذ وتشغّل المسالخ ومخازن تبريد اللحوم ومعالجة المياه والغاز الحيوي والمنشآت الحديدية والري المحوري في سلطنة عُمان وموريتانيا. أخبرني بنوع المشروع وسعته وموقعه. للتواصل: ‎+968 9124 0816‎",
+  fr: "Bienvenue ! OCEAN conçoit, construit et met en service abattoirs, chambres froides, traitement des eaux et biogaz, structures métalliques et pivots d’irrigation, en Oman et en Mauritanie. Décrivez votre projet — type, capacité, lieu."
+};
+window.SITE_INTENT = function (t) { var s = t.toLowerCase(); if (/[؀-ۿ]/.test(t)) return "ar"; if (/(bonjour|abattoir|devis|vous|quel|merci)/.test(s)) return "fr"; if (/price|cost|quote|budget/.test(s)) return "price"; if (/slaughter|restrain|carcass|rail|conveyor|bleed/.test(s)) return "slaughter"; if (/cold|chill|freez|refrig/.test(s)) return "cold"; if (/waste|water|biogas|sludge|digest/.test(s)) return "water"; if (/steel|shed|hangar|truss|warehouse/.test(s)) return "steel"; if (/pivot|irrigat|umc|spray/.test(s)) return "irrigation"; if (/service|support|spare|install/.test(s)) return "service"; if (/where|oman|mauritania|sudan|location/.test(s)) return "where"; if (/contact|email|phone|address/.test(s)) return "contact"; if (/what do|about|who|design and build/.test(s)) return "about"; return "fallback"; };
+window.SITE_PRODUCT = function (t) { var s = t.toLowerCase(); if (/slaughter|abattoir/.test(s)) return "Slaughterhouse"; if (/cold|freez|chill/.test(s)) return "Cold storage"; if (/biogas|waste/.test(s)) return "Wastewater / biogas"; if (/steel|shed|hangar/.test(s)) return "Steel structures"; if (/pivot|irrigat/.test(s)) return "Pivot irrigation"; return null; };
+
+window.BAWADI_SITE = function (D, photo, esc) {
+  [].forEach.call(document.querySelectorAll(".uc"), function (u) { u.addEventListener("click", function () { u.classList.toggle("on"); }); });
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = window.matchMedia && matchMedia("(hover:hover)").matches;
+  /* cursor */
+  var c1 = document.getElementById("cur"), c2 = document.getElementById("cur2"), mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my;
+  if (fine) { addEventListener("pointermove", function (e) { mx = e.clientX; my = e.clientY; c1.style.transform = "translate(" + (mx - 4) + "px," + (my - 4) + "px)"; var t = e.target.closest && e.target.closest("a,button,input,select,textarea,canvas"); c2.classList.toggle("big", !!t); }); (function cl() { rx += (mx - rx) * .18; ry += (my - ry) * .18; c2.style.transform = "translate(" + (rx - c2.offsetWidth / 2) + "px," + (ry - c2.offsetHeight / 2) + "px)"; requestAnimationFrame(cl); })(); c1.style.cssText += ";transform-origin:0 0"; c2.style.left = c2.style.top = c1.style.left = c1.style.top = "0"; c1.style.marginLeft = c2.style.marginLeft = "0"; }
+  /* spotlight cards */
+  document.addEventListener("pointermove", function (e) { var el = e.target.closest && e.target.closest(".cell,.disc div"); if (!el) return; var r = el.getBoundingClientRect(); el.style.setProperty("--mx", (e.clientX - r.left) + "px"); el.style.setProperty("--my", (e.clientY - r.top) + "px"); });
+  /* reveal */
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .12 });
+  [].forEach.call(document.querySelectorAll(".rv"), function (e) { io.observe(e); });
+
+  /* command palette */
+  var pal = document.getElementById("pal"), pin = document.getElementById("palin"), pl = document.getElementById("pallist"), sel = 0;
+  var cmds = [["Who we are", "#about"], ["Solutions orbit", "#solutions"], ["Site tour", "#tour"], ["Plan a project — brief builder", "#plan"], ["Slaughterhouse engineering", "#slaughter"], ["Meat cold storage", "#cold"], ["Wastewater & biogas", "#wastewater"], ["Pivot irrigation simulator", "#irrigation"], ["UMC motors & reducers", "#irrigation"], ["Our team", "#team"], ["Where we work", "#presence"], ["Ask OCEAN AI", "#ai"], ["Request a quote", "#contact"]];
+  function renderP() { var q = pin.value.toLowerCase(), f = cmds.filter(function (c) { return c[0].toLowerCase().indexOf(q) > -1; }); sel = Math.min(sel, Math.max(0, f.length - 1)); pl.innerHTML = ""; f.forEach(function (c, i) { var li = document.createElement("li"); li.innerHTML = '<button type="button" class="' + (i === sel ? "sel" : "") + '">' + esc(c[0]) + '<small>' + c[1] + '</small></button>'; li.firstChild.onclick = function () { go(c[1]); }; pl.appendChild(li); }); return f; }
+  function go(h) { pal.classList.remove("open"); location.hash = ""; document.querySelector(h).scrollIntoView({ behavior: "smooth" }); }
+  function openP() { pal.classList.add("open"); pin.value = ""; sel = 0; renderP(); setTimeout(function () { pin.focus(); }, 30); }
+  document.getElementById("kbtn").onclick = openP;
+  pin.addEventListener("input", function () { sel = 0; renderP(); });
+  addEventListener("keydown", function (e) { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); pal.classList.contains("open") ? pal.classList.remove("open") : openP(); } if (!pal.classList.contains("open")) return; var f = renderP(); if (e.key === "Escape") pal.classList.remove("open"); if (e.key === "ArrowDown") { sel = (sel + 1) % f.length; renderP(); e.preventDefault(); } if (e.key === "ArrowUp") { sel = (sel - 1 + f.length) % f.length; renderP(); e.preventDefault(); } if (e.key === "Enter" && f[sel]) go(f[sel][1]); });
+  pal.addEventListener("click", function (e) { if (e.target === pal) pal.classList.remove("open"); });
+
+  /* ===== 3D shed that builds on scroll ===== */
+  var build = document.getElementById("build"), cv = document.getElementById("gl");
+  var phases = [["01 · DESIGN", "3D design of the livestock shed", "Every project starts as a complete 3D model. Buildings, livestock pens, roads, parking and loading areas are planned together before any steel is cut."], ["02 · GROUND", "Preparing the land", "Heavy equipment arrives and the ground is levelled and made ready for the footings."], ["03 · FRAME", "Erecting the steel frame", "Steel sections are cut on site and the columns rise along the shed."], ["04 · TRUSSES", "Lifting a roof truss into place", "Roof trusses go up along the shed, braced by purlins."], ["05 · FINISH", "The finished shaded pens", "Shade roofing, concrete feed troughs and painted railings complete the pens."]];
+  var ph = document.getElementById("phase"), steps = document.getElementById("steps").children, hcopy = document.getElementById("hcopy");
+  var curPh = -1;
+  function setPh(i) { if (i === curPh) return; curPh = i; ph.classList.remove("on"); setTimeout(function () { ph.innerHTML = "<small>" + phases[i][0] + "</small><h3>" + esc(phases[i][1]) + "</h3><p>" + esc(phases[i][2]) + "</p>"; ph.classList.add("on"); }, 180); [].forEach.call(steps, function (s, k) { s.classList.toggle("on", k <= i); }); document.getElementById("hPhase").textContent = phases[i][0]; }
+  function progress() { var r = build.getBoundingClientRect(); return Math.min(1, Math.max(0, -r.top / (build.offsetHeight - innerHeight))); }
+  if (!window.THREE) { build.classList.add("nogl"); var fb = document.createElement("div"); fb.className = "fallback"; document.getElementById("stick").insertBefore(fb, cv); }
+  else (function () {
+    var T = THREE, R = new T.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); R.setPixelRatio(Math.min(devicePixelRatio, 2));
+    var S = new T.Scene(); S.fog = new T.Fog(0x051428, 60, 150);
+    var cam = new T.PerspectiveCamera(38, 1, .1, 400);
+    S.add(new T.HemisphereLight(0xbfe3ff, 0x08182c, .9)); var sun = new T.DirectionalLight(0xffe2b0, 1.1); sun.position.set(30, 50, 25); S.add(sun);
+    var grid = new T.GridHelper(160, 80, 0x47b2ff, 0x1d4f86); grid.material.transparent = true; grid.material.opacity = .35; S.add(grid);
+    var ground = new T.Mesh(new T.PlaneGeometry(30, 52), new T.MeshStandardMaterial({ color: 0x6b5a3e, roughness: 1, transparent: true, opacity: 0 })); ground.rotation.x = -Math.PI / 2; ground.position.y = .02; S.add(ground);
+    var W = 16, L = 40, H = 5, RISE = 3, frames = 9, els = [];
+    function mat(c) { return new T.MeshStandardMaterial({ color: c, metalness: .5, roughness: .45, wireframe: true, transparent: true, opacity: 1 }); }
+    var steelM = mat(0x8a96a3), blueM = mat(0x2f78c8), yellowM = mat(0xf2c230), roofM = mat(0x2e6fbe), concM = mat(0xb9b2a6);
+    roofM.side = T.DoubleSide;
+    function bar(a, b, th, m) { var d = new T.Vector3().subVectors(b, a), len = d.length(); var g = new T.BoxGeometry(th, len, th); var me = new T.Mesh(g, m); me.position.copy(a).add(b).multiplyScalar(.5); me.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), d.clone().normalize()); return me; }
+    function add(obj, t0, t1, kind) { S.add(obj); obj.userData = { t0: t0, t1: t1, kind: kind, base: obj.position.clone() }; els.push(obj); }
+    for (var f = 0; f < frames; f++) {
+      var z = -L / 2 + f * (L / (frames - 1)), st = f / frames;
+      [-W / 2, W / 2].forEach(function (x, k) { var c = new T.Mesh(new T.BoxGeometry(.38, H, .38), k ? blueM : yellowM); c.position.set(x, H / 2, z); add(c, .38 + st * .14, .5 + st * .14, "rise"); var foot = new T.Mesh(new T.BoxGeometry(1, .3, 1), concM); foot.position.set(x, .15, z); add(foot, .22 + st * .1, .3 + st * .1, "pop"); });
+      var tr = new T.Group(), p = function (x, y) { return new T.Vector3(x, y, 0); };
+      tr.add(bar(p(-W / 2, H), p(W / 2, H), .16, steelM)); tr.add(bar(p(-W / 2, H), p(0, H + RISE), .16, steelM)); tr.add(bar(p(0, H + RISE), p(W / 2, H), .16, steelM));
+      for (var i = 1; i < 8; i++) { var x = -W / 2 + i * W / 8, y = H + RISE * (1 - Math.abs(x) / (W / 2)); tr.add(bar(p(x, H), p(x, y), .1, steelM)); if (i < 7) { var x2 = -W / 2 + (i + 1) * W / 8, y2 = H + RISE * (1 - Math.abs(x2) / (W / 2)); tr.add(bar(p(x, H), p(x2, y2), .08, steelM)); } }
+      tr.position.set(0, 0, z); add(tr, .56 + st * .16, .66 + st * .16, "drop");
+    }
+    [-W / 2, -W / 4, 0, W / 4, W / 2].forEach(function (x, k) { var y = H + RISE * (1 - Math.abs(x) / (W / 2)) + .12; var pu = bar(new T.Vector3(x, y, -L / 2), new T.Vector3(x, y, L / 2), .12, steelM); add(pu, .74 + k * .015, .8 + k * .015, "grow"); });
+    [-1, 1].forEach(function (s, k) { var g = new T.PlaneGeometry(Math.hypot(W / 2, RISE) + .4, L + 1); var m = new T.Mesh(g, roofM); m.position.set(s * W / 4, H + RISE / 2 + .2, 0); m.rotation.x = -Math.PI / 2; m.rotateY(window.ROOFSIGN * s * Math.atan2(RISE, W / 2)); add(m, .82 + k * .03, .9 + k * .03, "slide"); });
+    [-1, 1].forEach(function (s, k) { var tg = new T.Mesh(new T.BoxGeometry(1, .7, L), concM); tg.position.set(s * (W / 2 - 1.6), .35, 0); add(tg, .86, .92, "grow"); var r1 = bar(new T.Vector3(s * (W / 2 - 2.4), 1.3, -L / 2), new T.Vector3(s * (W / 2 - 2.4), 1.3, L / 2), .1, blueM); add(r1, .9, .95, "grow"); for (var q = 0; q < 9; q++) { var pz = -L / 2 + q * L / 8, post = new T.Mesh(new T.BoxGeometry(.14, 1.3, .14), yellowM); post.position.set(s * (W / 2 - 2.4), .65, pz); add(post, .88 + q * .004, .93 + q * .004, "rise"); } });
+    var total = els.length, theta = .9, drag = null, vel = 0, pS = 0;
+    cv.addEventListener("pointerdown", function (e) { drag = { x: e.clientX, t: theta }; });
+    addEventListener("pointermove", function (e) { if (drag) { var nt = drag.t - (e.clientX - drag.x) * .006; vel = nt - theta; theta = nt; } });
+    addEventListener("pointerup", function () { drag = null; });
+    function ease(t) { return t < 0 ? 0 : t > 1 ? 1 : 1 - Math.pow(1 - t, 3); }
+    function size() { var w = cv.clientWidth, h = cv.clientHeight; R.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+    addEventListener("resize", size); size();
+    var hC = document.getElementById("hCount"), hV = document.getElementById("hView"), hB = document.getElementById("hBar");
+    (function loop(now) {
+      var p = progress(); pS += (p - pS) * .12;
+      if (!drag) { theta += vel; vel *= .94; if (!reduce) theta += .0009; }
+      var rad = (innerWidth > 900 ? 84 : 96) - pS * 20, phi = 1.0 - pS * .1, cx = innerWidth > 900 ? -6 : 0;
+      cam.position.set(cx + rad * Math.sin(phi) * Math.cos(theta), rad * Math.cos(phi) + 4, rad * Math.sin(phi) * Math.sin(theta)); cam.lookAt(cx, 3 + pS * 1.5, 0);
+      var solid = pS > .5, placed = 0, sw = Math.min(1, Math.max(0, (pS - .45) / .15));
+      [steelM, blueM, yellowM, roofM, concM].forEach(function (m) { m.wireframe = sw < .5; m.opacity = 1; }); roofM.opacity = sw < .5 ? 1 : .78;
+      ground.material.opacity = ease((pS - .14) / .12) * .55; grid.material.opacity = .35 - sw * .2;
+      els.forEach(function (o) { var u = o.userData, t = ease((pS - u.t0) / (u.t1 - u.t0)); o.visible = t > 0.001 || pS < .02 && false; if (t >= 1) placed++;
+        if (u.kind === "rise") { o.scale.y = Math.max(.001, t); o.position.y = u.base.y * t; }
+        else if (u.kind === "drop") { o.position.y = (1 - t) * 18; }
+        else if (u.kind === "grow") { o.scale.set(1, 1, 1); o.scale[o.geometry && o.geometry.parameters && o.geometry.parameters.depth > 5 ? "z" : "y"] = Math.max(.001, t); }
+        else if (u.kind === "slide") { o.scale.set(1, Math.max(.001, t), 1); }
+        else { o.scale.setScalar(Math.max(.001, t)); } });
+      var blue = pS < .12; if (blue) els.forEach(function (o) { o.visible = true; o.scale.set(1, 1, 1); o.position.copy(o.userData.base); if (o.userData.kind === "drop") o.position.y = 0; });
+      hC.textContent = (blue ? total : placed) + " / " + total; hV.textContent = blue ? "BLUEPRINT · FULL MODEL" : (sw < .5 ? "WIREFRAME" : "STEEL"); hB.style.width = (pS * 100) + "%";
+      setPh(Math.min(4, Math.max(0, Math.floor((pS - .2) / .8 * 5.2))));
+      hcopy.style.opacity = Math.max(0, 1 - pS * 4); ph.style.opacity = pS > .24 ? "" : "0"; ph.style.pointerEvents = pS > .24 ? "" : "none"; hcopy.style.transform = "translateY(calc(-50% - " + (pS * 120) + "px))"; hcopy.style.pointerEvents = pS > .2 ? "none" : "auto";
+      R.render(S, cam); requestAnimationFrame(loop);
+    })();
+  })();
+  if (!window.THREE) { setPh(0); addEventListener("scroll", function () { setPh(Math.min(4, Math.floor(progress() * 5.2))); var p = progress(); hcopy.style.opacity = Math.max(0, 1 - p * 4); ph.style.opacity = p > .24 ? "" : "0"; }, { passive: true }); }
+
+  /* orbit */
+  var SV = [["Engineering & design", "Concepts, 3D models and technical drawings, and the right solution for each project.", "hd/shed-design-3d-poster.jpg", "#build"], ["Steel structures", "Hangars, warehouses, livestock sheds and industrial buildings fabricated and erected to specification: steel frames, roof trusses and shade structures.", "hd/steel-frame.jpg", "#build"], ["Slaughterhouses", "Rotary restraining boxes, overhead rails and conveyors, bleeding and dressing stations, and processing halls built for hygiene, speed and safe handling.", "hd/dressing-line.jpg", "#slaughter"], ["Chilling & freezing", "Meat chilling and freezing stores that protect quality and safety, extend shelf life and run efficiently.", "hd/processing-hall.jpg", "#cold"], ["Environmental treatment", "Systems that treat the wastewater from slaughter, processing and cleaning, with less impact.", "hd/conveyor-hall.jpg", "#wastewater"], ["Bioenergy", "Anaerobic digestion that turns organic waste into biogas: renewable energy, less waste to dispose of.", "hd/slaughter-hall.jpg", "#wastewater"], ["Pivot irrigation", "Centre-pivot systems that water every centimetre of land evenly: efficient, water-saving, smart and built to last.", "hd/irr-span-spray.jpg", "#irrigation"]];
+  var orb = document.getElementById("orbit"), oinfo = document.getElementById("oinfo"), oimg = document.getElementById("oimg"), oc = 0, ot;
+  var nds = SV.map(function (s, i) { var a = -Math.PI / 2 + i * 2 * Math.PI / SV.length, b = document.createElement("button"); b.type = "button"; b.className = "nd"; b.style.left = (50 + Math.cos(a) * 42) + "%"; b.style.top = (50 + Math.sin(a) * 42) + "%"; b.innerHTML = "<span>0" + (i + 1) + "</span>" + esc(s[0]); b.onclick = function () { clearInterval(ot); setO(i); }; b.onmouseenter = function () { clearInterval(ot); setO(i); }; orb.appendChild(b); return b; });
+  function setO(i) { oc = i; nds.forEach(function (n, k) { n.classList.toggle("on", k === i); }); oimg.style.opacity = 0; setTimeout(function () { oimg.src = SV[i][2]; oimg.style.opacity = 1; }, 200); oinfo.innerHTML = '<span class="tag"><i></i>Discipline 0' + (i + 1) + ' / 07</span><h3>' + esc(SV[i][0]) + '</h3><p>' + esc(SV[i][1]) + '</p><a class="btn gold" style="margin-top:22px" href="' + SV[i][3] + '">Explore →</a>'; }
+  setO(0); if (!reduce) ot = setInterval(function () { setO((oc + 1) % SV.length); }, 3500);
+
+  /* lightbox */
+  var lbx = document.getElementById("lbx"), LL = [], li = 0;
+  function openL(a, i) { LL = a; li = i; drawL(); lbx.classList.add("open"); }
+  function drawL() { var g = LL[li]; lbx.innerHTML = ""; var st = document.createElement("div"); st.className = "st"; if (g.v) { var v = document.createElement("video"); v.controls = true; v.autoplay = true; v.playsInline = true; v.poster = g.img; v.src = VID + g.v + ".mp4"; v.onerror = function () { st.innerHTML = '<img src="' + g.img + '" alt="">'; }; st.appendChild(v); } else st.innerHTML = '<img src="' + g.img + '" alt="' + esc(g.c) + '">'; lbx.appendChild(st); var r = document.createElement("div"); r.className = "row"; r.innerHTML = '<button type="button" data-d="-1" aria-label="Previous">‹</button><span>' + esc(g.c) + (g.v ? ' · <a href="' + VID + g.v + '.mp4" target="_blank" rel="noopener">Open film ↗</a>' : "") + '</span><button type="button" data-d="1" aria-label="Next">›</button><button type="button" data-d="x" aria-label="Close">×</button>'; lbx.appendChild(r); }
+  lbx.onclick = function (e) { var d = e.target.getAttribute && e.target.getAttribute("data-d"); if (d === "x" || e.target === lbx) { lbx.classList.remove("open"); lbx.innerHTML = ""; } else if (d) { li = (li + +d + LL.length) % LL.length; drawL(); } };
+  addEventListener("keydown", function (e) { if (!lbx.classList.contains("open")) return; if (e.key === "Escape") { lbx.classList.remove("open"); lbx.innerHTML = ""; } if (e.key === "ArrowRight") { li = (li + 1) % LL.length; drawL(); } if (e.key === "ArrowLeft") { li = (li - 1 + LL.length) % LL.length; drawL(); } });
+
+  /* horizontal tour */
+  var TS = [["The master plan", "Every project starts as a complete 3D model. Buildings, livestock pens, roads, parking and loading areas are planned together before any steel is cut.", ["3D site model", "Layout & access", "Loading areas"], "tour-plan", "steel-frame", "From the 3D model to steel on site"], ["Livestock pens", "Shaded steel pens with concrete feed troughs and painted railings keep the animals in good condition before processing.", ["Steel shade structures", "Feed troughs", "Railings"], "tour-pens", "trough-railings", "Feed troughs and railings along the pens"], ["Rotary restraining box", "Fabricated in the workshop and tested on site, the rotary box holds each animal safely and steadily at the start of the line.", ["Workshop fabrication", "Site testing", "Safe handling"], "tour-restrain", "restraining-box", "A rotary restraining box from our workshop"], ["The slaughter line", "Overhead rails, bleeding stations with stainless-steel troughs and lifting platforms carry each carcass through dressing and splitting.", ["Overhead rails", "Bleeding station", "Lifting platforms"], "tour-line", "bleeding-station", "Bleeding station with stainless-steel trough"], ["Conveyor & processing", "Powered overhead conveyors move carcasses through hygienic processing halls with stainless-steel worktables, on their way to chilling and storage.", ["Powered conveyor", "Stainless worktables", "On to cold storage"], "tour-conveyor", "conveyor-workers", "The powered overhead conveyor"], ["Watch the full slaughter-line tour", "The complete line on film, 2:09.", ["Full film"], "film-slaughter-line", "dressing-line", "The dressing line"], ["3D fly-through of the complex", "The whole complex as a 3D model, 1:00.", ["3D film"], "film-complex-3d", "slaughter-hall", "The slaughter hall"]];
+  var tour = document.getElementById("tour"), track = document.getElementById("track"), tp = document.getElementById("tprog"), tcn = document.getElementById("tcount");
+  tour.style.height = (TS.length * 70 + 60) + "vh";
+  TS.forEach(function (s, i) { var d = document.createElement("article"); d.className = "slide"; d.innerHTML = '<div class="txt"><span class="n" aria-hidden="true">0' + (i + 1) + '</span><span class="tag"><i></i>Chapter 0' + (i + 1) + '</span><h3>' + esc(s[0]) + '</h3><p>' + esc(s[1]) + '</p><div class="ts">' + s[2].map(function (x) { return "<span>" + esc(x) + "</span>"; }).join("") + '</div><button type="button" class="clip" aria-label="Play film: ' + esc(s[0]) + '"><img src="hd/' + s[3] + '-poster.jpg" alt=""><b>▶</b><span>Play the clip</span></button></div><figure class="ph"><img src="hd/' + s[4] + '.jpg" alt="' + esc(s[5]) + '" loading="lazy"><figcaption>' + esc(s[5]) + '</figcaption></figure>'; d.querySelector(".clip").onclick = function () { openL([{ v: s[3], img: "hd/" + s[3] + "-poster.jpg", c: s[0] }], 0); }; track.appendChild(d); });
+  function htour() { var r = tour.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (tour.offsetHeight - innerHeight))), max = track.scrollWidth - innerWidth; track.style.transform = "translateX(" + (-p * max) + "px)"; tp.style.width = (p * 100) + "%"; tcn.textContent = "0" + (Math.min(TS.length - 1, Math.round(p * (TS.length - 1))) + 1) + " / 0" + TS.length; }
+  addEventListener("scroll", htour, { passive: true }); addEventListener("resize", htour); htour();
+
+  /* configurator */
+  var FAC = { "Slaughterhouse": { cap: ["Head per day", 50, 2000, 50, 300], sp: true, mods: ["Livestock holding pens", "Rotary restraining box", "Overhead rails & powered conveyors", "Bleeding & dressing stations", "Processing hall with stainless worktables"], link: ["Meat cold storage", "Wastewater treatment & biogas"] }, "Cold storage": { cap: ["Storage capacity (tonnes)", 20, 2000, 20, 200], mods: ["Fresh meat chilling rooms", "Meat freezing stores", "Carcass hanging systems", "Insulation panels", "Industrial refrigeration", "Control & monitoring"], link: ["Design & build in one contract"] }, "Wastewater & biogas": { cap: ["Connected slaughter capacity (head/day)", 50, 2000, 50, 300], mods: ["Blood & fat removal", "Suspended solids screening", "Physical-chemical treatment", "Biological treatment", "Treated water reuse", "Anaerobic digestion → biogas"], link: ["Environmental management"] }, "Steel structures": { cap: ["Covered area (m²)", 500, 50000, 500, 5000], mods: ["3D modelling of the whole site", "Steel frames & roof trusses", "Shade structures", "Feed troughs & railings"], link: ["Coordination between disciplines"] }, "Pivot irrigation": { cap: ["Area (hectares)", 10, 2000, 10, 50], mods: ["Robust centre pivot (100×100 mm legs)", "I-WOB spray heads & pressure regulators", "UMC motors & reducers", "Remote control & auto-restart"], link: ["Free plot survey & layout", "24-hour after-sales response"] } };
+  var state = { fac: "Slaughterhouse", sp: ["Cattle"], loc: "Oman", cap: 300 };
+  var facEl = document.getElementById("fac"), spEl = document.getElementById("sp"), locEl = document.getElementById("loc"), capI = document.getElementById("cap"), capV = document.getElementById("capV"), capL = document.getElementById("capL"), sheet = document.getElementById("sheet"), spWrap = document.getElementById("spWrap");
+  function seg(el, opts, multi, key) { el.innerHTML = ""; opts.forEach(function (o) { var b = document.createElement("button"); b.type = "button"; b.textContent = o; b.onclick = function () { if (multi) { var a = state[key], i = a.indexOf(o); if (i > -1 && a.length > 1) a.splice(i, 1); else if (i < 0) a.push(o); } else state[key] = o; if (key === "fac") { var c = FAC[o].cap; state.cap = c[4]; } draw(); }; el.appendChild(b); }); }
+  seg(facEl, Object.keys(FAC), false, "fac"); seg(spEl, ["Cattle", "Sheep", "Camels"], true, "sp"); seg(locEl, ["Oman", "Mauritania", "Elsewhere"], false, "loc");
+  capI.addEventListener("input", function () { state.cap = +capI.value; draw(true); });
+  function draw(onlyCap) {
+    var F = FAC[state.fac], c = F.cap;
+    [].forEach.call(facEl.children, function (b) { b.classList.toggle("on", b.textContent === state.fac); }); [].forEach.call(spEl.children, function (b) { b.classList.toggle("on", state.sp.indexOf(b.textContent) > -1); }); [].forEach.call(locEl.children, function (b) { b.classList.toggle("on", b.textContent === state.loc); });
+    spWrap.style.display = F.sp ? "" : "none"; capL.textContent = (F.sp ? "03" : "02") + " · " + c[0]; capI.min = c[1]; capI.max = c[2]; capI.step = c[3]; capI.value = state.cap; capV.textContent = (+state.cap).toLocaleString("en-US");
+    var proj = state.fac + (F.sp ? " — " + state.sp.join(", ") : ""), cap = (+state.cap).toLocaleString("en-US") + " " + c[0].replace(/.*\(|\)/g, "").toLowerCase().replace("head per day", "head/day");
+    var body = "Project brief via ocean-ei.com%0AProject: " + encodeURIComponent(proj) + "%0ACapacity: " + encodeURIComponent(cap) + "%0ALocation: " + encodeURIComponent(state.loc);
+    if (onlyCap && sheet.querySelector("#scap")) { sheet.querySelector("#scap").textContent = cap; sheet.querySelector("#wa").href = "https://wa.me/96891240816?text=" + body; sheet.querySelector("#em").href = "mailto:Oceannvst@gmail.com?subject=Project%20brief&body=" + body; return; }
+    sheet.innerHTML = '<div class="hd"><span>PROJECT BRIEF · OCEAN E&amp;I</span><span>DRAFT</span></div><h3>' + esc(proj) + '</h3><div class="meta"><div><small>CAPACITY</small><b id="scap">' + esc(cap) + '</b></div><div><small>LOCATION</small><b>' + esc(state.loc) + '</b></div><div><small>MODULES</small><b>' + (F.mods.length + F.link.length) + '</b></div></div><ul>' + F.mods.map(function (m, i) { return '<li style="animation-delay:' + (i * 50) + 'ms"><i>' + (i + 1) + '</i>' + esc(m) + '</li>'; }).join("") + F.link.map(function (m, i) { return '<li class="link" style="animation-delay:' + ((F.mods.length + i) * 50) + 'ms"><i>+</i>' + esc(m) + '</li>'; }).join("") + '</ul><span class="stamp">DRAFT</span><div class="act"><a id="wa" href="https://wa.me/96891240816?text=' + body + '" target="_blank" rel="noopener">Send on WhatsApp</a><a id="em" class="o" href="mailto:Oceannvst@gmail.com?subject=Project%20brief&body=' + body + '">Email the brief</a><button type="button" class="o" id="askAI">Refine with OCEAN AI</button></div><p style="margin:12px 0 0;font-size:12px;color:var(--muted)">Modules shown are from OCEAN’s service scope. Our engineers confirm the final design and proposal.</p>';
+    sheet.querySelector("#askAI").onclick = function () { window.BAWADI.openChat("I need a " + proj.toLowerCase() + ", " + cap + ", in " + state.loc); };
+  }
+  draw();
+
+  /* slaughter wall with tilt */
+  var SG = [["work-platforms", "Conveyor and work platforms along the line"], ["restraining-box", "Rotary restraining box installed on site"], ["splitting-platform-poster", "Splitting a carcass from a lifting platform", "splitting-platform"], ["bleeding-station", "Bleeding station with a stainless-steel trough"], ["restraining-box-test-poster", "Testing the rotary restraining box", "restraining-box-test"], ["overhead-rail", "Carcasses on the overhead rail line"], ["conveyor-hall", "Processing hall with conveyor lines"], ["carcass-dressing", "Dressing carcasses on the line"], ["conveyor-workers", "Work platforms along the overhead conveyor"], ["overhead-conveyor-poster", "Overhead conveyor in operation", "overhead-conveyor"], ["dressing-line", "Cattle dressing line in operation"], ["carcass-splitting", "Splitting a beef carcass"], ["processing-hall", "Processing hall with stainless-steel worktables"], ["slaughter-hall", "Slaughter hall with overhead rails and work stations"], ["rail-system-poster", "Overhead rail system in a new hall", "rail-system"], ["restraining-box-workshop", "The restraining box at the fabrication workshop"]].map(function (x) { return { img: "hd/" + x[0] + ".jpg", c: x[1], v: x[2] }; });
+  var wall = document.getElementById("wall");
+  SG.forEach(function (g, i) { var b = document.createElement("button"); b.type = "button"; b.className = "wi"; b.setAttribute("aria-label", (g.v ? "Play film: " : "Open photo: ") + g.c); b.innerHTML = '<img src="' + g.img + '" alt="" loading="lazy">' + (g.v ? '<span class="v">▶ FILM</span>' : "") + '<span class="c">' + esc(g.c) + '</span>'; b.onclick = function () { openL(SG, i); }; b.onpointermove = function (e) { var r = b.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; b.style.transform = "perspective(800px) rotateY(" + (x * 10) + "deg) rotateX(" + (-y * 10) + "deg) scale(1.02)"; }; b.onpointerleave = function () { b.style.transform = ""; }; wall.appendChild(b); });
+
+  /* cold store thermostat */
+  var tin = document.getElementById("tin"), tv = document.getElementById("tv"), tm = document.getElementById("tm"), rmode = document.getElementById("rmode"), ralarm = document.getElementById("ralarm"), frost = document.getElementById("frost"), rimg = document.querySelector("#room img"), mon = document.getElementById("mon"), mx2 = mon.getContext("2d"), hist = [];
+  function setT() { var t = +tin.value, fz = t <= -10; tv.textContent = (t > 0 ? "+" : t < 0 ? "−" : "") + Math.abs(t) + "°"; tm.textContent = fz ? "FREEZER STORE" : "CHILLING ROOM"; rmode.textContent = fz ? "Freezer store" : "Chilling room"; frost.style.opacity = Math.min(1, (4 - t) / 22); rimg.style.filter = "saturate(" + (0.4 + (t + 18) / 30) + ") hue-rotate(" + ((4 - t) * 1.2) + "deg) brightness(" + (0.85 + (t + 18) / 120) + ")"; }
+  tin.addEventListener("input", setT); setT();
+  var cur = -18;
+  (function chart() { var t = +tin.value; cur += (t - cur) * .05 + (Math.random() - .5) * .35; hist.push(cur); if (hist.length > 160) hist.shift(); var w = mon.width = mon.clientWidth * 2, h = mon.height = mon.clientHeight * 2; mx2.fillStyle = "rgba(5,20,40,.75)"; mx2.fillRect(0, 0, w, h); var lo = -22, hi = 8, Y = function (v) { return h - (v - lo) / (hi - lo) * h; }; mx2.strokeStyle = "rgba(255,107,107,.8)"; mx2.setLineDash([8, 8]); mx2.beginPath(); mx2.moveTo(0, Y(t + 3)); mx2.lineTo(w, Y(t + 3)); mx2.stroke(); mx2.setLineDash([]); mx2.strokeStyle = "#8fd0ff"; mx2.lineWidth = 3; mx2.beginPath(); hist.forEach(function (v, i) { var x = i / 159 * w; i ? mx2.lineTo(x, Y(v)) : mx2.moveTo(x, Y(v)); }); mx2.stroke(); mx2.fillStyle = "#cfe0f3"; mx2.font = "22px JetBrains Mono"; mx2.fillText("TEMP " + cur.toFixed(1) + "°C", 16, 32); mx2.fillStyle = "rgba(255,107,107,.9)"; mx2.fillText("ALARM LIMIT", w - 190, Y(t + 3) - 8); var al = cur > t + 3; ralarm.textContent = al ? "Alarm: limit crossed" : "Within limits"; ralarm.style.color = al ? "#ff8a8a" : ""; setTimeout(function () { requestAnimationFrame(chart); }, 60); })();
+
+  /* schematic */
+  var WL = [["Blood & fat removal", "Recovered at source", "70%"], ["Suspended solids", "Screened and separated", "55%"], ["Physical-chemical", "Treatment stage", "45%"], ["Biological", "Treatment stage", "40%"], ["Treated water reuse", "To the required quality", "60%"]];
+  var EL = [["Organic waste", "From slaughter operations", "65%"], ["Sludge treatment", "Stabilised and reduced", "50%"], ["Anaerobic digestion", "Biodegradable fraction", "70%"], ["Biogas", "Renewable energy, less waste to dispose of", "80%"]];
+  var EX = { "Treatment plant design": "Sized to the slaughterhouse's capacity and its wastewater.", "Organic waste treatment": "Managing slaughter waste and safely recovering resources.", "Biogas production": "Anaerobic digestion that turns waste into energy.", "Treated water reuse": "Reuse for suitable purposes once quality is met.", "Environmental management": "Less pollution and support for compliance." };
+  var sch = document.getElementById("sch");
+  function lineHTML(arr, cls, title) { return '<div class="line ' + cls + '"><h4>' + title + '</h4>' + arr.map(function (s, i) { return (i ? '<div class="pipe"></div>' : "") + '<button type="button" class="tank" data-n="' + esc(s[0]) + '" data-d="' + esc(s[1]) + '"><span class="t" style="--lv:' + s[2] + '"></span>' + esc(s[0]) + '</button>'; }).join("") + '</div>'; }
+  sch.innerHTML = lineHTML(WL, "", "WATER LINE<br>wastewater → reuse") + lineHTML(EL, "energy", "ENERGY LINE<br>waste → power") + '<div class="schinfo" id="sinf"></div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:18px">' + Object.keys(EX).map(function (k) { return '<button type="button" class="pill" data-x="' + esc(k) + '" style="color:#fff">' + esc(k) + '</button>'; }).join("") + '</div>';
+  var sinf = document.getElementById("sinf");
+  function pick(b) { [].forEach.call(sch.querySelectorAll(".tank"), function (t) { t.classList.toggle("on", t === b); }); sinf.innerHTML = "<b>" + b.getAttribute("data-n") + "</b><span>" + b.getAttribute("data-d") + "</span>"; }
+  [].forEach.call(sch.querySelectorAll(".tank"), function (b) { b.onclick = function () { pick(b); }; }); pick(sch.querySelector(".tank"));
+  [].forEach.call(sch.querySelectorAll("[data-x]"), function (b) { b.onclick = function () { [].forEach.call(sch.querySelectorAll(".tank"), function (t) { t.classList.remove("on"); }); var k = b.getAttribute("data-x"); sinf.innerHTML = "<b>" + esc(k) + "</b><span>" + esc(EX[k]) + "</span>"; }; });
+
+  /* pivot simulator */
+  var pc = document.getElementById("piv"), pg = pc.getContext("2d"), paint = document.createElement("canvas"); paint.width = paint.height = 640; var pp = paint.getContext("2d");
+  var ang = 0, run = !reduce, spd = 4, drops = [], covered = new Uint8Array(360), cov = document.getElementById("cov");
+  document.getElementById("pPlay").onclick = function () { run = !run; this.textContent = run ? "❚❚ Pause" : "▶ Run"; };
+  document.getElementById("pReset").onclick = function () { pp.clearRect(0, 0, 640, 640); covered = new Uint8Array(360); };
+  document.getElementById("pSpd").oninput = function () { spd = +this.value; };
+  if (reduce) document.getElementById("pPlay").textContent = "▶ Run";
+  var visible = false; new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(pc);
+  (function sim() {
+    if (visible) {
+      var C = 320, Rr = 300;
+      if (run) { var da = spd * .0035; for (var s = 0; s < 4; s++) { ang += da / 4; pp.save(); pp.translate(C, C); pp.rotate(ang); pp.fillStyle = "rgba(70,170,70,.06)"; pp.beginPath(); pp.moveTo(0, 0); pp.arc(0, 0, Rr, -.02, .02); pp.closePath(); pp.fill(); pp.restore(); } covered[Math.floor(((ang * 180 / Math.PI) % 360 + 360) % 360)] = 1; for (var k = 0; k < 6; k++) drops.push({ r: 30 + Math.random() * (Rr - 30), a: ang + (Math.random() - .5) * .05, life: 1 }); }
+      pg.clearRect(0, 0, 640, 640);
+      var g = pg.createRadialGradient(C, C, 20, C, C, Rr); g.addColorStop(0, "#9b7a4a"); g.addColorStop(1, "#7a5c34"); pg.fillStyle = g; pg.beginPath(); pg.arc(C, C, Rr, 0, 7); pg.fill();
+      pg.strokeStyle = "rgba(0,0,0,.08)"; for (var rr = 30; rr < Rr; rr += 18) { pg.beginPath(); pg.arc(C, C, rr, 0, 7); pg.stroke(); }
+      pg.drawImage(paint, 0, 0);
+      pg.save(); pg.translate(C, C); pg.rotate(ang); pg.fillStyle = "rgba(143,208,255,.18)"; pg.beginPath(); pg.moveTo(0, 0); pg.arc(0, 0, Rr, -.05, .05); pg.closePath(); pg.fill();
+      pg.strokeStyle = "#dfe8ef"; pg.lineWidth = 6; pg.beginPath(); pg.moveTo(0, 0); pg.lineTo(Rr, 0); pg.stroke();
+      for (var tw = 1; tw <= 5; tw++) { pg.fillStyle = "#cfd8df"; pg.fillRect(tw * Rr / 5.4 - 6, -9, 12, 18); }
+      pg.restore();
+      drops.forEach(function (d) { d.life -= .04; var x = C + Math.cos(d.a) * d.r, y = C + Math.sin(d.a) * d.r; pg.fillStyle = "rgba(190,230,255," + Math.max(0, d.life) + ")"; pg.fillRect(x, y + (1 - d.life) * 6, 2, 2); }); drops = drops.filter(function (d) { return d.life > 0; });
+      pg.fillStyle = "#fff"; pg.beginPath(); pg.arc(C, C, 10, 0, 7); pg.fill();
+      var n = 0; for (var q = 0; q < 360; q++) n += covered[q]; cov.textContent = Math.round(n / 3.6) + "%";
+    }
+    requestAnimationFrame(sim);
+  })();
+
+  /* hotspots */
+  var HS = [[45, 7, "Rotary joint", "Self-lubricating three-lip joint for a high load and smoother rotation."], [57, 44, "Precision irrigation for abundant harvests", "Remote control from a phone, automatic restart after a water or power cut, works through the night."], [21, 82, "Water inlet", "Feeds the pivot from the pump and hydraulic network."], [74, 86, "Robust centre pivot", "Reinforced 100 × 100 mm angle-steel legs, hot-dip galvanised."]];
+  var hot = document.getElementById("hot"), tip = document.getElementById("tip");
+  function setH(i) { [].forEach.call(hot.querySelectorAll(".hs"), function (b, k) { b.classList.toggle("on", k === i); }); tip.innerHTML = "<b>" + esc(HS[i][2]) + "</b><p>" + esc(HS[i][3]) + "</p>"; }
+  HS.forEach(function (h, i) { var b = document.createElement("button"); b.type = "button"; b.className = "hs"; b.style.left = h[0] + "%"; b.style.top = h[1] + "%"; b.textContent = i + 1; b.setAttribute("aria-label", h[2]); b.onclick = function () { setH(i); }; hot.appendChild(b); }); setH(0);
+
+  /* live clocks */
+  function tick() { [].forEach.call(document.querySelectorAll("[data-tz]"), function (e) { try { e.textContent = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit", timeZone: e.getAttribute("data-tz") }); } catch (x) {} }); }
+  tick(); setInterval(tick, 1000);
+
+  /* form */
+  var form = document.getElementById("form"), done = document.getElementById("done");
+  form.addEventListener("submit", function (e) { e.preventDefault(); var f = form.elements; if (!f.name.value.trim() || !f.email.value.trim() || !f.msg.value.trim()) { done.style.display = "block"; done.textContent = "Please fill in your name, email and enquiry."; return; } var body = "Name: " + f.name.value + "\nCompany: " + f.company.value + "\nEmail: " + f.email.value + "\nPhone: " + f.phone.value + "\n\n" + f.msg.value; var href = "mailto:Oceannvst@gmail.com?subject=" + encodeURIComponent(f.subject.value) + "&body=" + encodeURIComponent(body); done.style.display = "block"; done.innerHTML = 'Your enquiry is ready. <a href="' + href + '">Open it in your email app</a> to send it to Oceannvst@gmail.com, or copy it below.\n\n' + esc("Subject: " + f.subject.value + "\n" + body); try { location.href = href; } catch (x) {} });
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="engine.js"></script>
+</body>
+</html>
