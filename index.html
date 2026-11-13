@@ -334,6 +334,13 @@ img[src*="/bleeding-station"],img[src*="/carcass-dressing"],img[src*="/carcass-s
 #tour.swipe .track::-webkit-scrollbar{display:none}
 #tour.swipe .slide{scroll-snap-align:start;scroll-snap-stop:always;height:auto;min-height:0;grid-template-rows:auto 230px}
 #tour.swipe .tourhead .mono:after{content:"  ·  SWIPE →";color:var(--gold)}
+.tdots{display:none}
+#tour.swipe .tprog{display:none}
+#tour.swipe .tdots{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:18px}
+#tour.swipe .tdots button{width:26px;height:26px;padding:0;border:0;background:none;display:grid;place-items:center}
+#tour.swipe .tdots button:before{content:"";width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.25);transition:width .25s,background .25s}
+#tour.swipe .tdots button.on:before{width:22px;background:var(--gold)}
+#tour.swipe .tdots span{margin-left:10px;font:600 13px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#cfe0f3;min-width:44px}
 /* phone layout */
 @media(max-width:700px){
   .hcopy{left:18px;right:18px;max-width:none}
@@ -765,7 +772,13 @@ window.BAWADI_SITE = function (D, photo, esc) {
   function hframe() { tx += (tgt - tx) * .22; if (Math.abs(tgt - tx) < .5) tx = tgt; track.style.transform = "translate3d(" + Math.round(tx) + "px,0,0)"; tRaf = tx === tgt ? 0 : requestAnimationFrame(hframe); }
   function htour() { if (SW) return; htarget(); if (!tRaf) tRaf = requestAnimationFrame(hframe); }
   addEventListener("scroll", htour, { passive: true }); addEventListener("resize", function () { tsize(); htour(); }); if (!SW) { htarget(); tx = tgt; hframe(); }
-  track.addEventListener("scroll", function () { if (!SW) return; var m = track.scrollWidth - track.clientWidth, p = m > 0 ? track.scrollLeft / m : 0; tp.style.transform = "scaleX(" + p + ")"; tcn.textContent = "0" + (Math.round(p * (TS.length - 1)) + 1) + " / 0" + TS.length; }, { passive: true });
+  /* phone: dots + "1 / 7" under the slides, following the swipe; tap a dot to jump */
+  var tdots = document.createElement("div"); tdots.className = "tdots"; tdots.innerHTML = TS.map(function (s, i) { return '<button type="button" aria-label="Chapter ' + (i + 1) + '"></button>'; }).join("") + '<span aria-live="polite"></span>'; tstick.appendChild(tdots);
+  var dotB = tdots.querySelectorAll("button"), dotN = tdots.querySelector("span");
+  function tcur(i) { [].forEach.call(dotB, function (d, k) { d.classList.toggle("on", k === i); }); dotN.textContent = (i + 1) + " / " + TS.length; }
+  [].forEach.call(dotB, function (d, k) { d.onclick = function () { track.scrollTo({ left: track.children[k].offsetLeft - 18, behavior: "smooth" }); }; });
+  tcur(0);
+  track.addEventListener("scroll", function () { if (!SW) return; var m = track.scrollWidth - track.clientWidth, p = m > 0 ? track.scrollLeft / m : 0, i = Math.round(p * (TS.length - 1)); tp.style.transform = "scaleX(" + p + ")"; tcn.textContent = "0" + (i + 1) + " / 0" + TS.length; tcur(i); }, { passive: true });
 
   /* configurator */
   var FAC = { "Slaughterhouse": { cap: ["Head per day", 50, 2000, 50, 300], sp: true, mods: ["Livestock holding pens", "Rotary restraining box", "Overhead rails & powered conveyors", "Bleeding & dressing stations", "Processing hall with stainless worktables"], link: ["Meat cold storage", "Wastewater treatment & biogas"] }, "Cold storage": { cap: ["Storage capacity (tonnes)", 20, 2000, 20, 200], mods: ["Fresh meat chilling rooms", "Meat freezing stores", "Carcass hanging systems", "Insulation panels", "Industrial refrigeration", "Control & monitoring"], link: ["Design & build in one contract"] }, "Wastewater & biogas": { cap: ["Connected slaughter capacity (head/day)", 50, 2000, 50, 300], mods: ["Blood & fat removal", "Suspended solids screening", "Physical-chemical treatment", "Biological treatment", "Treated water reuse", "Anaerobic digestion → biogas"], link: ["Environmental management"] }, "Steel structures": { cap: ["Covered area (m²)", 500, 50000, 500, 5000], mods: ["3D modelling of the whole site", "Steel frames & roof trusses", "Shade structures", "Feed troughs & railings"], link: ["Coordination between disciplines"] }, "Pivot irrigation": { cap: ["Area (hectares)", 10, 2000, 10, 50], mods: ["Robust centre pivot (100×100 mm legs)", "I-WOB spray heads & pressure regulators", "UMC motors & reducers", "Remote control & auto-restart"], link: ["Free plot survey & layout", "24-hour after-sales response"] } };
