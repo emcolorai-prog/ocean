@@ -171,7 +171,7 @@ h2{font-size:clamp(34px,4.6vw,68px);line-height:1.02}
 /* cold */
 .cold{background:radial-gradient(ellipse at 70% 0%,#123f6e,#061a33 60%)}
 .thermo{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:stretch;margin-top:40px}
-@media(max-width:900px){.thermo{grid-template-columns:1fr}}
+@media(max-width:900px){.thermo{gap:16px}}
 .dial{width:150px;border-radius:30px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:12px}
 .dial .v{font:800 40px var(--display)}
 .dial input{writing-mode:vertical-lr;direction:rtl;width:40px;height:260px;accent-color:var(--sky)}
@@ -183,7 +183,7 @@ h2{font-size:clamp(34px,4.6vw,68px);line-height:1.02}
 .room .badge{border-radius:14px;padding:12px 16px}
 .room .badge small{display:block;font:600 10px 'JetBrains Mono';letter-spacing:.14em;color:var(--gold)}.room .badge b{font:600 20px var(--display)}
 .room canvas{position:absolute;left:20px;right:20px;bottom:20px;width:calc(100% - 40px);height:120px;border-radius:16px}
-.room .note{position:absolute;right:30px;bottom:150px;font:600 10px 'JetBrains Mono';color:#cfe0f3;letter-spacing:.12em}
+.room .note{position:absolute;right:30px;bottom:158px;font:600 10px 'JetBrains Mono';color:#cfe0f3;letter-spacing:.12em}
 .cardsx{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
 @media(max-width:900px){.cardsx{grid-template-columns:1fr 1fr}}
 .cardsx div{border-radius:18px;padding:18px}
@@ -261,7 +261,8 @@ h2{font-size:clamp(34px,4.6vw,68px);line-height:1.02}
 .reg div{border:1px dashed rgba(228,177,77,.5);border-radius:18px;padding:18px}.reg b{display:block;font:600 16px var(--display)}.reg span{color:#b9cde3;font-size:14px}
 /* ai + contact */
 .term{border-radius:28px;overflow:hidden;display:grid;grid-template-columns:1.5fr 1fr}
-@media(max-width:900px){.term{grid-template-columns:minmax(0,1fr)}.term .chat{border-right:0;border-bottom:1px solid var(--line);height:540px;min-width:0}}
+@media(max-width:900px){.term{grid-template-columns:minmax(0,1fr)}.term .chat{border-right:0;border-bottom:1px solid var(--line);height:auto;min-width:0}
+.term .bd-chat{height:auto}.term .bd-log{flex:none;height:300px}.term .bd-chips{flex:none;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.term .bd-chips::-webkit-scrollbar{display:none}.term .bd-chips>*{flex:none}.term .side{padding:26px 22px}}
 @media(max-width:520px){.disc{grid-template-columns:minmax(0,1fr)}}
 .term .chat{height:600px;padding:20px;display:flex;flex-direction:column;border-right:1px solid var(--line)}
 .term .side{padding:34px;display:flex;flex-direction:column;gap:16px;justify-content:center}
@@ -292,8 +293,47 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:#9fb7d1;font-size:1
 html,body{overflow-x:clip}
 section{overflow-x:clip}
 .tank .t em{position:relative;z-index:1;font:600 12px 'JetBrains Mono';font-style:normal;color:#eaf3ff}
+/* photos with the OCEAN logo + phone numbers stamped top-left: keep that corner in frame when cropped */
+img[src*="/bleeding-station"],img[src*="/carcass-dressing"],img[src*="/carcass-splitting"],img[src*="/conveyor-hall"],img[src*="/conveyor-workers"],img[src*="/dressing-line"],img[src*="/film-slaughter-line-poster"],img[src*="/overhead-conveyor-poster"],img[src*="/overhead-rail"],img[src*="/processing-hall"],img[src*="/rail-system-poster"],img[src*="/restraining-box-test-poster"],img[src*="/restraining-box-workshop"],img[src*="/restraining-box."],img[src*="/shed-design-3d-poster"],img[src*="/slaughter-hall"],img[src*="/tour-conveyor-poster"],img[src*="/tour-line-poster"],img[src*="/tour-restrain-poster"],img[src*="/work-platforms"]{object-position:left top}
+/* the round orbit image always cuts its corners, so crop the watermark out of view there */
+.orbit .core img[src*="/bleeding-station"],.orbit .core img[src*="/carcass-dressing"],.orbit .core img[src*="/carcass-splitting"],.orbit .core img[src*="/conveyor-hall"],.orbit .core img[src*="/conveyor-workers"],.orbit .core img[src*="/dressing-line"],.orbit .core img[src*="/film-slaughter-line-poster"],.orbit .core img[src*="/overhead-conveyor-poster"],.orbit .core img[src*="/overhead-rail"],.orbit .core img[src*="/processing-hall"],.orbit .core img[src*="/rail-system-poster"],.orbit .core img[src*="/restraining-box-test-poster"],.orbit .core img[src*="/restraining-box-workshop"],.orbit .core img[src*="/restraining-box."],.orbit .core img[src*="/shed-design-3d-poster"],.orbit .core img[src*="/slaughter-hall"],.orbit .core img[src*="/tour-conveyor-poster"],.orbit .core img[src*="/tour-line-poster"],.orbit .core img[src*="/tour-restrain-poster"],.orbit .core img[src*="/work-platforms"]{object-position:right bottom;transform:scale(1.3);transform-origin:right bottom}
+/* bento text cards: centre the text vertically so tall cards don't leave a gap at the bottom */
+.bento>.cell:not(.ph):not([style*="display:flex"]){display:flex;flex-direction:column;justify-content:center}
+/* site tour on phones: header clears the menu bar and each slide fits the screen */
+@media(max-width:800px){
+  #tour .stick{padding-top:86px;justify-content:flex-start}
+  .tourhead{margin-bottom:14px;padding:0 18px}
+  .tourhead h2{font-size:24px!important;margin-top:10px!important}
+  .track{padding:0 18px;gap:14px}
+  .slide{flex-basis:calc(100vw - 36px);height:calc(100vh - 250px);height:calc(100svh - 250px);min-height:400px;grid-template-rows:auto minmax(0,1fr);border-radius:22px}
+  .slide .n{display:none}
+  .slide .txt{padding:20px;gap:0}
+  .slide h3{font-size:20px;margin:8px 0 6px}
+  .slide p{font-size:14px;line-height:1.55;margin-bottom:10px}
+  .slide .ts{display:none}
+  .slide .clip{margin-top:4px;padding:6px 14px 6px 6px;font-size:13px}
+  .slide .clip img,.slide .clip b{width:64px;height:40px}
+  .slide .clip b{left:6px}
+  .tprog{margin:16px 18px 0}
+}
+/* cold-store photo: its badges sit top-left, so crop the stamped logo out of view rather than half-hiding it */
+.room img{object-position:right bottom!important;transform:scale(1.25);transform-origin:right bottom}
+/* tablets: schematic fits without sideways scrolling */
+@media(min-width:701px) and (max-width:1000px){
+  .room img{transform:scale(1.45)}
+  .sch{overflow:visible;padding:26px 22px}
+  .line{min-width:0}
+  .line h4{width:104px}
+  .pipe{flex:0 0 14px}
+  .tank{font-size:12px;min-width:0}
+  .tank .t{width:58px;height:58px}
+}
 /* phone layout */
 @media(max-width:700px){
+  .hcopy{left:18px;right:18px;max-width:none}
+  .hcopy h1{font-size:40px}
+  .hcopy p{font-size:16px;margin:18px 0 22px}
+  .drag{white-space:nowrap;font-size:10px;letter-spacing:.12em;bottom:30px}
   .pad{padding:72px 0}
   .dock{gap:4px;padding:5px 5px 5px 8px}
   .dock .k{display:none}
@@ -430,7 +470,7 @@ section{overflow-x:clip}
 <div><b>Processing halls</b><span>Worktables, conveyors and washable floors.</span></div>
 </div>
 <div class="wall" id="wall"></div>
-<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:26px;padding:24px;margin-top:30px"><img src="hd/brochure-cover.jpg" alt="Catalogue cover" style="width:170px;border-radius:12px"><div style="flex:1 1 300px"><span class="tag"><i></i>PDF · 39 pages · in English</span><h3 style="font:600 24px Unbounded;margin:8px 0">Slaughterhouse equipment catalogue</h3><p style="color:#b9cde3;margin:0 0 14px;line-height:1.6">Photos of every unit we supply: cattle, camel and sheep lines, carcass processing, chilling rails, deboning and packing, compressed air, holding pens and steam boilers.</p><a class="btn gold" href="https://ocean-ei.com/assets/docs/ocean-slaughterhouse-equipment.pdf" target="_blank" rel="noopener">Download catalogue</a></div></div>
+<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:26px;padding:24px;margin-top:30px"><img src="hd/brochure-cover.jpg" alt="Catalogue cover" style="width:170px;border-radius:12px"><div style="flex:1 1 300px"><span class="tag"><i></i>Catalogue · 39 pages · in English</span><h3 style="font:600 24px Unbounded;margin:8px 0">Slaughterhouse equipment catalogue</h3><p style="color:#b9cde3;margin:0 0 14px;line-height:1.6">Photos of every unit we supply: cattle, camel and sheep lines, carcass processing, chilling rails, deboning and packing, compressed air, holding pens and steam boilers.</p><a class="btn gold" href="mailto:info@ocean-ei.com?subject=Slaughterhouse%20equipment%20catalogue&body=Please%20send%20me%20the%20slaughterhouse%20equipment%20catalogue.">Request the catalogue</a></div></div>
 </div></section>
 
 <section id="cold" class="cold pad"><div class="wrap">
@@ -489,7 +529,7 @@ section{overflow-x:clip}
 <div class="hotw">
 <div class="hot" id="hot"><img src="hd/irr-tower-3d.jpg" alt="3D model of the robust centre pivot"></div>
 <div><span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>Tap the numbered points</span><h3 style="font:600 32px Unbounded;margin:14px 0 18px">Inside the centre pivot</h3><div class="tip glass" id="tip" aria-live="polite"></div>
-<a class="btn" style="margin-top:18px" href="https://ocean-ei.com/assets/docs/ocean-irrigation-brochure.pdf" target="_blank" rel="noopener">Get the brochure (PDF · 17 pages · French)</a></div>
+<a class="btn" style="margin-top:18px" href="docs/ocean-irrigation-brochure.pdf" target="_blank" rel="noopener">Get the brochure (PDF · 17 pages · French)</a></div>
 </div>
 <div style="margin-top:90px"><span class="tag" style="color:#bdf28a"><i style="background:#bdf28a"></i>Why choose OCEAN</span><h2 style="margin-top:14px;font-size:clamp(28px,3.6vw,52px)">Engineered for the field, ready for the future</h2></div>
 <div class="svc3">
@@ -577,7 +617,9 @@ section{overflow-x:clip}
 <div class="lbx" id="lbx" role="dialog" aria-label="Media viewer"></div>
 
 <script>
-var VID = "https://ocean-ei.com/assets/media/"; window.ROOFSIGN = 1;
+var VID = "media/"; /* films shipped with the site; ids that share a film map to its file */
+var VMAP = { "tour-plan": "complex-3d", "film-complex-3d": "complex-3d", "tour-pens": "finished-pens", "tour-restrain": "restraining-box-test", "tour-line": "slaughter-line-tour", "film-slaughter-line": "slaughter-line-tour", "tour-conveyor": "overhead-conveyor" };
+function vsrc(id) { return VID + (VMAP[id] || id) + ".mp4"; } window.ROOFSIGN = 1;
 window.SITE_AI_NAME = "OCEAN AI"; window.SITE_WA = "96891240816"; window.SITE_EMAIL = "Oceannvst@gmail.com"; window.SITE_PHONE = "+968 9124 0816";
 window.SITE_ENQ_LABELS = ["Project", "Capacity", "Location"];
 window.SITE_PLACEHOLDER = "Describe your project — e.g. a cattle slaughterhouse, 300 head/day, Muscat";
@@ -698,7 +740,7 @@ window.BAWADI_SITE = function (D, photo, esc) {
   /* lightbox */
   var lbx = document.getElementById("lbx"), LL = [], li = 0;
   function openL(a, i) { LL = a; li = i; drawL(); lbx.classList.add("open"); }
-  function drawL() { var g = LL[li]; lbx.innerHTML = ""; var st = document.createElement("div"); st.className = "st"; if (g.v) { var v = document.createElement("video"); v.controls = true; v.autoplay = true; v.playsInline = true; v.poster = g.img; v.src = VID + g.v + ".mp4"; v.onerror = function () { st.innerHTML = '<img src="' + g.img + '" alt="">'; }; st.appendChild(v); } else st.innerHTML = '<img src="' + g.img + '" alt="' + esc(g.c) + '">'; lbx.appendChild(st); var r = document.createElement("div"); r.className = "row"; r.innerHTML = '<button type="button" data-d="-1" aria-label="Previous">‹</button><span>' + esc(g.c) + (g.v ? ' · <a href="' + VID + g.v + '.mp4" target="_blank" rel="noopener">Open film ↗</a>' : "") + '</span><button type="button" data-d="1" aria-label="Next">›</button><button type="button" data-d="x" aria-label="Close">×</button>'; lbx.appendChild(r); }
+  function drawL() { var g = LL[li]; lbx.innerHTML = ""; var st = document.createElement("div"); st.className = "st"; if (g.v) { var v = document.createElement("video"); v.controls = true; v.autoplay = true; v.playsInline = true; v.poster = g.img; v.src = vsrc(g.v); v.onerror = function () { st.innerHTML = '<img src="' + g.img + '" alt="">'; }; st.appendChild(v); } else st.innerHTML = '<img src="' + g.img + '" alt="' + esc(g.c) + '">'; lbx.appendChild(st); var r = document.createElement("div"); r.className = "row"; r.innerHTML = '<button type="button" data-d="-1" aria-label="Previous">‹</button><span>' + esc(g.c) + (g.v ? ' · <a href="' + vsrc(g.v) + '" target="_blank" rel="noopener">Open film ↗</a>' : "") + '</span><button type="button" data-d="1" aria-label="Next">›</button><button type="button" data-d="x" aria-label="Close">×</button>'; lbx.appendChild(r); }
   lbx.onclick = function (e) { var d = e.target.getAttribute && e.target.getAttribute("data-d"); if (d === "x" || e.target === lbx) { lbx.classList.remove("open"); lbx.innerHTML = ""; } else if (d) { li = (li + +d + LL.length) % LL.length; drawL(); } };
   addEventListener("keydown", function (e) { if (!lbx.classList.contains("open")) return; if (e.key === "Escape") { lbx.classList.remove("open"); lbx.innerHTML = ""; } if (e.key === "ArrowRight") { li = (li + 1) % LL.length; drawL(); } if (e.key === "ArrowLeft") { li = (li - 1 + LL.length) % LL.length; drawL(); } });
 
@@ -707,7 +749,7 @@ window.BAWADI_SITE = function (D, photo, esc) {
   var tour = document.getElementById("tour"), track = document.getElementById("track"), tp = document.getElementById("tprog"), tcn = document.getElementById("tcount");
   tour.style.height = (TS.length * 70 + 60) + "vh";
   TS.forEach(function (s, i) { var d = document.createElement("article"); d.className = "slide"; d.innerHTML = '<div class="txt"><span class="n" aria-hidden="true">0' + (i + 1) + '</span><span class="tag"><i></i>Chapter 0' + (i + 1) + '</span><h3>' + esc(s[0]) + '</h3><p>' + esc(s[1]) + '</p><div class="ts">' + s[2].map(function (x) { return "<span>" + esc(x) + "</span>"; }).join("") + '</div><button type="button" class="clip" aria-label="Play film: ' + esc(s[0]) + '"><img src="hd/' + s[3] + '-poster.jpg" alt=""><b>▶</b><span>Play the clip</span></button></div><figure class="ph"><img src="hd/' + s[4] + '.jpg" alt="' + esc(s[5]) + '" loading="lazy"><figcaption>' + esc(s[5]) + '</figcaption></figure>'; d.querySelector(".clip").onclick = function () { openL([{ v: s[3], img: "hd/" + s[3] + "-poster.jpg", c: s[0] }], 0); }; track.appendChild(d); });
-  function htour() { var r = tour.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (tour.offsetHeight - innerHeight))), max = track.scrollWidth - innerWidth; track.style.transform = "translateX(" + (-p * max) + "px)"; tp.style.width = (p * 100) + "%"; tcn.textContent = "0" + (Math.min(TS.length - 1, Math.round(p * (TS.length - 1))) + 1) + " / 0" + TS.length; }
+  function htour() { var r = tour.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (tour.offsetHeight - innerHeight))), max = track.scrollWidth - innerWidth, n1 = TS.length - 1, s = p * n1, k = Math.min(n1 - 1, Math.floor(s)), f = s - k, t = Math.min(1, Math.max(0, (f - .3) / .4)); t = t * t * (3 - 2 * t); /* each slide rests, aligned, for most of its scroll range, then glides to the next */ track.style.transform = "translateX(" + (-((k + t) / n1) * max) + "px)"; tp.style.width = (p * 100) + "%"; tcn.textContent = "0" + (Math.min(TS.length - 1, Math.round(p * (TS.length - 1))) + 1) + " / 0" + TS.length; }
   addEventListener("scroll", htour, { passive: true }); addEventListener("resize", htour); htour();
 
   /* configurator */
