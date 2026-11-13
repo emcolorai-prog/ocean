@@ -328,6 +328,12 @@ img[src*="/bleeding-station"],img[src*="/carcass-dressing"],img[src*="/carcass-s
   .tank{font-size:12px;min-width:0}
   .tank .t{width:58px;height:58px}
 }
+/* phone site tour: swipe left/right, slides snap into place */
+#tour.swipe .stick{position:relative;height:auto;overflow:visible;padding:76px 0 30px}
+#tour.swipe .track{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none;transform:none!important;will-change:auto;scroll-padding:0 18px}
+#tour.swipe .track::-webkit-scrollbar{display:none}
+#tour.swipe .slide{scroll-snap-align:start;scroll-snap-stop:always;height:auto;min-height:0;grid-template-rows:auto 230px}
+#tour.swipe .tourhead .mono:after{content:"  ·  SWIPE →";color:var(--gold)}
 /* phone layout */
 @media(max-width:700px){
   .hcopy{left:18px;right:18px;max-width:none}
@@ -749,15 +755,17 @@ window.BAWADI_SITE = function (D, photo, esc) {
   var tour = document.getElementById("tour"), track = document.getElementById("track"), tp = document.getElementById("tprog"), tcn = document.getElementById("tcount");
   var tstick = tour.querySelector(".stick"), VH = 0, VW = 0;
   /* size the tour in fixed pixels: on phones the address bar showing/hiding changes the viewport height, which made the slides jump */
-  function tsize() { if (VW === innerWidth && VH) return; VW = innerWidth; VH = document.documentElement.clientHeight; tstick.style.height = VH + "px"; tour.style.height = Math.round(VH * (TS.length * .7 + .6)) + "px"; }
+  var SW = false; /* SW: phone mode - a native swipe carousel instead of scroll-driven motion (that always shakes on real phones) */
+  function tsize() { if (VW === innerWidth && VH) return; VW = innerWidth; VH = document.documentElement.clientHeight; SW = VW <= 800; tour.classList.toggle("swipe", SW); if (SW) { tstick.style.height = ""; tour.style.height = ""; track.style.transform = ""; return; } tstick.style.height = VH + "px"; tour.style.height = Math.round(VH * (TS.length * .7 + .6)) + "px"; }
   tsize();
   TS.forEach(function (s, i) { var d = document.createElement("article"); d.className = "slide"; d.innerHTML = '<div class="txt"><span class="n" aria-hidden="true">0' + (i + 1) + '</span><span class="tag"><i></i>Chapter 0' + (i + 1) + '</span><h3>' + esc(s[0]) + '</h3><p>' + esc(s[1]) + '</p><div class="ts">' + s[2].map(function (x) { return "<span>" + esc(x) + "</span>"; }).join("") + '</div><button type="button" class="clip" aria-label="Play film: ' + esc(s[0]) + '"><img src="hd/' + s[3] + '-poster.jpg" alt=""><b>▶</b><span>Play the clip</span></button></div><figure class="ph"><img src="hd/' + s[4] + '.jpg" alt="' + esc(s[5]) + '" loading="lazy"><figcaption>' + esc(s[5]) + '</figcaption></figure>'; d.querySelector(".clip").onclick = function () { openL([{ v: s[3], img: "hd/" + s[3] + "-poster.jpg", c: s[0] }], 0); }; track.appendChild(d); });
   var tx = 0, tgt = 0, tRaf = 0;
   function htarget() { var p = Math.min(1, Math.max(0, (scrollY - tour.offsetTop) / (tour.offsetHeight - VH))), max = track.scrollWidth - VW, n1 = TS.length - 1, s = p * n1, k = Math.min(n1 - 1, Math.floor(s)), f = s - k, t = Math.min(1, Math.max(0, (f - .3) / .4)); t = t * t * (3 - 2 * t); /* each slide rests, aligned, for most of its scroll range, then glides to the next */ tgt = -((k + t) / n1) * max; tp.style.transform = "scaleX(" + p + ")"; tcn.textContent = "0" + (Math.min(n1, Math.round(p * n1)) + 1) + " / 0" + TS.length; }
   /* move the track once per frame, easing toward the target and landing on whole pixels, so it glides instead of shaking */
   function hframe() { tx += (tgt - tx) * .22; if (Math.abs(tgt - tx) < .5) tx = tgt; track.style.transform = "translate3d(" + Math.round(tx) + "px,0,0)"; tRaf = tx === tgt ? 0 : requestAnimationFrame(hframe); }
-  function htour() { htarget(); if (!tRaf) tRaf = requestAnimationFrame(hframe); }
-  addEventListener("scroll", htour, { passive: true }); addEventListener("resize", function () { tsize(); htour(); }); htarget(); tx = tgt; hframe();
+  function htour() { if (SW) return; htarget(); if (!tRaf) tRaf = requestAnimationFrame(hframe); }
+  addEventListener("scroll", htour, { passive: true }); addEventListener("resize", function () { tsize(); htour(); }); if (!SW) { htarget(); tx = tgt; hframe(); }
+  track.addEventListener("scroll", function () { if (!SW) return; var m = track.scrollWidth - track.clientWidth, p = m > 0 ? track.scrollLeft / m : 0; tp.style.transform = "scaleX(" + p + ")"; tcn.textContent = "0" + (Math.round(p * (TS.length - 1)) + 1) + " / 0" + TS.length; }, { passive: true });
 
   /* configurator */
   var FAC = { "Slaughterhouse": { cap: ["Head per day", 50, 2000, 50, 300], sp: true, mods: ["Livestock holding pens", "Rotary restraining box", "Overhead rails & powered conveyors", "Bleeding & dressing stations", "Processing hall with stainless worktables"], link: ["Meat cold storage", "Wastewater treatment & biogas"] }, "Cold storage": { cap: ["Storage capacity (tonnes)", 20, 2000, 20, 200], mods: ["Fresh meat chilling rooms", "Meat freezing stores", "Carcass hanging systems", "Insulation panels", "Industrial refrigeration", "Control & monitoring"], link: ["Design & build in one contract"] }, "Wastewater & biogas": { cap: ["Connected slaughter capacity (head/day)", 50, 2000, 50, 300], mods: ["Blood & fat removal", "Suspended solids screening", "Physical-chemical treatment", "Biological treatment", "Treated water reuse", "Anaerobic digestion → biogas"], link: ["Environmental management"] }, "Steel structures": { cap: ["Covered area (m²)", 500, 50000, 500, 5000], mods: ["3D modelling of the whole site", "Steel frames & roof trusses", "Shade structures", "Feed troughs & railings"], link: ["Coordination between disciplines"] }, "Pivot irrigation": { cap: ["Area (hectares)", 10, 2000, 10, 50], mods: ["Robust centre pivot (100×100 mm legs)", "I-WOB spray heads & pressure regulators", "UMC motors & reducers", "Remote control & auto-restart"], link: ["Free plot survey & layout", "24-hour after-sales response"] } };
